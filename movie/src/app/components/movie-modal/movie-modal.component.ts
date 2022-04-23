@@ -5,8 +5,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ModalController, NavParams } from '@ionic/angular';
+import { ModalController, NavParams, ToastController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
+import { AddMovie, EditMovie } from 'src/app/store/action/movies.actions';
 import { Modal } from '../../models/modal.interface';
 
 @Component({
@@ -22,33 +23,14 @@ export class MovieModalComponent implements OnInit {
 
   movieForm: FormGroup;
 
-  genres = [
-    { id: 1, name: 'Action', image: 'assets/movies-genres/action.png' },
-    { id: 2, name: 'Comedy', image: 'assets/movies-genres/comedy.png' },
-    { id: 3, name: 'Crime', image: 'assets/movies-genres/crime.png' },
-    {
-      id: 4,
-      name: 'Documentary',
-      image: 'assets/movies-genres/documentary.png',
-    },
-    { id: 5, name: 'Drama', image: 'assets/movies-genres/drama.png' },
-    { id: 6, name: 'Fantasy', image: 'assets/movies-genres/fantasy.png' },
-    { id: 7, name: 'Film noir', image: 'assets/movies-genres/film noir.png' },
-    { id: 8, name: 'Horror', image: 'assets/movies-genres/horror.png' },
-    { id: 9, name: 'Romance', image: 'assets/movies-genres/romance.png' },
-    {
-      id: 10,
-      name: 'Science fiction',
-      image: 'assets/movies-genres/science fiction.png',
-    },
-    { id: 11, name: 'Westerns', image: 'assets/movies-genres/westerns.png' },
-  ];
+  genres = [{ name: 'Action' }, { name: 'Comedy' }];
 
   constructor(
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController,
     public navParams: NavParams,
-    private store: Store
+    private store: Store,
+    public toastController: ToastController
   ) {
     this.createForm();
   }
@@ -76,12 +58,41 @@ export class MovieModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.modal = { ...this.navParams.data.modalProps };
-    if (this.modal.title === 'Edit Form') {
+    if (this.modal.title === 'Edit Movie') {
       this.movieForm.patchValue(this.modal.movie);
     }
   }
 
   dismiss() {
     this.modalCtrl.dismiss();
+  }
+
+  async movieFormSubmit() {
+    if (this.navParams.data.option === 'add') {
+      this.store.dispatch(new AddMovie(this.movieForm.value));
+      this.clearMovieForm();
+      this.presentToast('Add successful!');
+    } else if (this.navParams.data.option === 'edit') {
+      this.store.dispatch(new EditMovie(this.movieForm.value));
+      this.presentToast('Update successful!');
+    }
+
+    this.dismiss();
+  }
+
+  clearMovieForm() {
+    this.movieForm.reset();
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      icon: 'information-circle',
+      animated: true,
+      color: 'success',
+      cssClass: 'movie-modal',
+    });
+    toast.present();
   }
 }

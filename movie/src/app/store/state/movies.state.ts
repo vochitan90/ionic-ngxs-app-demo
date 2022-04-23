@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { patch, updateItem, removeItem } from '@ngxs/store/operators';
 import { tap } from 'rxjs/operators';
 import { Movie } from 'src/app/models/movie.interface';
 import { MoviesService } from 'src/app/services/movies.service';
-import { FetchMovies } from '../action/movies.actions';
+import {
+  FetchMovies,
+  AddMovie,
+  EditMovie,
+  DeleteMovie,
+} from '../action/movies.actions';
 
 export class MoviesStateModel {
   movies: Movie[];
@@ -32,8 +38,8 @@ export class MovieState {
   }
 
   @Action(FetchMovies)
-  getTodos(
-    { getState, setState, patchState }: StateContext<MoviesStateModel>,
+  fetchMovies(
+    { getState, patchState }: StateContext<MoviesStateModel>,
     { payload }
   ) {
     const { start, end } = payload;
@@ -43,6 +49,50 @@ export class MovieState {
         patchState({
           movies: [...state.movies, ...moviesRes],
         });
+      })
+    );
+  }
+
+  @Action(AddMovie)
+  async addMovie(
+    { getState, patchState }: StateContext<MoviesStateModel>,
+    { payload }
+  ): Promise<void> {
+    const newMovie = await this.moviesService.addMovie(payload).toPromise();
+    const state = getState();
+    patchState({
+      movies: [...state.movies, newMovie],
+    });
+  }
+
+  @Action(EditMovie)
+  async EditMovie(
+    { setState }: StateContext<MoviesStateModel>,
+    { payload }
+  ): Promise<void> {
+    const editMovie = await this.moviesService.editMovie(payload).toPromise();
+    setState(
+      patch({
+        movies: updateItem(
+          (movie: Movie) => movie.id === editMovie.id,
+          editMovie
+        ),
+      })
+    );
+  }
+
+  @Action(DeleteMovie)
+  async DeleteMovie(
+    { setState }: StateContext<MoviesStateModel>,
+    { payload }
+  ): Promise<void> {
+    debugger;
+    const deleteMovie = await this.moviesService
+      .deleteMovie(payload)
+      .toPromise();
+    setState(
+      patch({
+        movies: removeItem<Movie>((movie) => movie.id === payload.id),
       })
     );
   }

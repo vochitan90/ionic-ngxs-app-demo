@@ -99,9 +99,9 @@
           cancelText="Dismiss"
           formControlName="genre"
         >
-          <ion-select-option *ngFor="let genre of genres" [value]="genre">{{
-            genre.name
-          }}</ion-select-option>
+          <ion-select-option *ngFor="let genre of genres" [value]="genre.name">
+            <ion-text>{{ genre.name }}</ion-text></ion-select-option
+          >
         </ion-select>
       </ion-item>
 

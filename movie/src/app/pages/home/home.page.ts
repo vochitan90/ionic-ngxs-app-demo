@@ -3,10 +3,18 @@ import { Select, Store } from '@ngxs/store';
 import { MovieState } from '../../store/state/movies.state';
 import { Observable } from 'rxjs';
 import { Movie } from '../../models/movie.interface';
-import { FetchMovies } from '../../store/action/movies.actions';
-import { IonContent, IonInfiniteScroll, ModalController } from '@ionic/angular';
+import { DeleteMovie, FetchMovies } from '../../store/action/movies.actions';
+import {
+  AlertController,
+  IonContent,
+  IonInfiniteScroll,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 import { Router } from '@angular/router';
 import { MovieModalComponent } from 'src/app/components/movie-modal/movie-modal.component';
+import { MoviesService } from '../../services/movies.service';
+import { ToastController } from '@ionic/angular';
 
 export type Pagination = {
   start: number;
@@ -36,7 +44,10 @@ export class HomePage implements OnInit {
   constructor(
     private store: Store,
     private router: Router,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
+    private loadingController: LoadingController,
+    private toastController: ToastController
   ) {}
 
   changeView() {
@@ -107,5 +118,64 @@ export class HomePage implements OnInit {
       option: 'edit',
     };
     this.presentModal(componentProps, MovieModalComponent);
+  }
+
+  deleteMovie(movie: Movie) {
+    this.presentAlertConfirm(movie, `Are you sure to delete ${movie.title}?`);
+  }
+
+  async presentAlertConfirm(movie, message) {
+    const alert = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirm!',
+      message: message,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          id: 'cancel-button',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          },
+        },
+        {
+          text: 'Okay',
+          id: 'confirm-button',
+          handler: () => {
+            this.showLoadingAndDelete(movie);
+            this.presentToast('Delete successfully!');
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  async showLoadingAndDelete(movie: Movie) {
+    const loading = await this.loadingController.create({
+      spinner: null,
+      message: 'Please wait...',
+      translucent: true,
+      cssClass: 'custom-class custom-loading',
+    });
+    await loading.present();
+
+    this.store.dispatch(new DeleteMovie(movie));
+
+    await loading.dismiss();
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      icon: 'information-circle',
+      animated: true,
+      color: 'success',
+      cssClass: 'movie-modal',
+    });
+    toast.present();
   }
 }
