@@ -71,15 +71,17 @@ export class MovieModalComponent implements OnInit {
   }
 
   async updatePoster() {
-    const { secure_url } =
-      await this.uploadImageService.uploadImageToCloudinary(
-        this.movieForm.value.title,
-        this.selectedPhoto
-      );
+    if (this.selectedPhoto) {
+      const { secure_url } =
+        await this.uploadImageService.uploadImageToCloudinary(
+          this.movieForm.value.title,
+          this.selectedPhoto
+        );
 
-    this.movieForm.patchValue({
-      poster: secure_url,
-    });
+      this.movieForm.patchValue({
+        poster: secure_url,
+      });
+    }
   }
 
   async movieFormSubmit() {

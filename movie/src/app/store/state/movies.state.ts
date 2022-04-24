@@ -86,10 +86,7 @@ export class MovieState {
     { setState }: StateContext<MoviesStateModel>,
     { payload }
   ): Promise<void> {
-    debugger;
-    const deleteMovie = await this.moviesService
-      .deleteMovie(payload)
-      .toPromise();
+    await this.moviesService.deleteMovie(payload).toPromise();
     setState(
       patch({
         movies: removeItem<Movie>((movie) => movie.id === payload.id),
