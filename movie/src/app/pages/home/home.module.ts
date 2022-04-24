@@ -6,8 +6,14 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { FilterPipe } from '../../pipes/filter.pipe';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { MovieModalComponent } from 'src/app/components/movie-modal/movie-modal.component';
+
+import {
+  CloudinaryModule,
+  CloudinaryConfiguration,
+} from '@cloudinary/angular-5.x';
+import { Cloudinary } from 'cloudinary-core';
+import { UploadImageService } from 'src/app/services/upload-image.service';
 
 @NgModule({
   imports: [
@@ -16,8 +22,12 @@ import { MovieModalComponent } from 'src/app/components/movie-modal/movie-modal.
     IonicModule,
     HomePageRoutingModule,
     ReactiveFormsModule,
-    NgSelectModule,
+    CloudinaryModule.forRoot({ Cloudinary }, {
+      cloud_name: 'moonknight',
+      upload_preset: 'gwswuquc',
+    } as CloudinaryConfiguration),
   ],
   declarations: [HomePage, FilterPipe, MovieModalComponent],
+  providers: [UploadImageService],
 })
 export class HomePageModule {}

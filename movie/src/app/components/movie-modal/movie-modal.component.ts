@@ -9,6 +9,8 @@ import { ModalController, NavParams, ToastController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
 import { AddMovie, EditMovie } from 'src/app/store/action/movies.actions';
 import { Modal } from '../../models/modal.interface';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { UploadImageService } from '../../services/upload-image.service';
 
 @Component({
   selector: 'app-movie-modal',
@@ -30,7 +32,8 @@ export class MovieModalComponent implements OnInit {
     private modalCtrl: ModalController,
     public navParams: NavParams,
     private store: Store,
-    public toastController: ToastController
+    public toastController: ToastController,
+    private uploadImageService: UploadImageService
   ) {
     this.createForm();
   }
@@ -67,7 +70,20 @@ export class MovieModalComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  async updatePoster() {
+    const { secure_url } =
+      await this.uploadImageService.uploadImageToCloudinary(
+        this.movieForm.value.title,
+        this.selectedPhoto
+      );
+
+    this.movieForm.patchValue({
+      poster: secure_url,
+    });
+  }
+
   async movieFormSubmit() {
+    await this.updatePoster();
     if (this.navParams.data.option === 'add') {
       this.store.dispatch(new AddMovie(this.movieForm.value));
       this.clearMovieForm();
@@ -94,5 +110,17 @@ export class MovieModalComponent implements OnInit {
       cssClass: 'movie-modal',
     });
     toast.present();
+  }
+
+  selectedPhoto: string;
+
+  async takePicture() {
+    const capturedPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Camera,
+      quality: 60,
+    });
+
+    this.selectedPhoto = `data:image/jpeg;base64,${capturedPhoto.base64String}`;
   }
 }
