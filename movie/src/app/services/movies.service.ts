@@ -26,6 +26,15 @@ export class MoviesService {
     );
   }
 
+  getMovie(id: string): Observable<Movie> {
+    return (
+      this.http
+        // Type-checking the response => .get<Movie[]>
+        .get<Movie>(this.URL_BASE + `movies/${id}`)
+        .pipe(retry(1), timeout(5000))
+    );
+  }
+
   addMovie(movie: Movie): Observable<Movie> {
     movie['id'] = uuidv4();
     const httpOptions = {

@@ -9,16 +9,22 @@ import {
   AddMovie,
   EditMovie,
   DeleteMovie,
+  GetMovieDetail,
+  LikeMovie,
 } from '../action/movies.actions';
 
-export class MoviesStateModel {
+export interface MoviesStateModel {
   movies: Movie[];
+  movies1: Movie[];
+  movieDetail: Movie;
 }
 
 @State<MoviesStateModel>({
   name: 'catalog',
   defaults: {
     movies: [],
+    movies1: [],
+    movieDetail: null,
   },
 })
 @Injectable()
@@ -31,10 +37,19 @@ export class MovieState {
   }
 
   @Selector()
-  static getMovieById(state: MoviesStateModel) {
-    return (id: string) => {
-      return state.movies.filter((x) => x.id === id)[0]; // only one
-    };
+  static getMovieDetail(state: MoviesStateModel) {
+    return state.movieDetail;
+  }
+
+  @Action(GetMovieDetail)
+  async getMovieDetail(
+    { getState, patchState }: StateContext<MoviesStateModel>,
+    { id }
+  ): Promise<void> {
+    const movieDetail = await this.moviesService.getMovie(id).toPromise();
+    patchState({
+      movieDetail: { ...movieDetail },
+    });
   }
 
   @Action(FetchMovies)
@@ -79,6 +94,38 @@ export class MovieState {
         ),
       })
     );
+  }
+
+  @Action(LikeMovie)
+  async LikeMovie(
+    { getState, setState, patchState }: StateContext<MoviesStateModel>,
+    { payload }
+  ): Promise<void> {
+    const likeMovie = await this.moviesService.editMovie(payload).toPromise();
+    // setState(
+    //   patch({
+    //     movies: updateItem(
+    //       (movie: Movie) => movie.id === likeMovie.id,
+    //       likeMovie
+    //     ),
+    //     movieList: updateItem(
+    //       (movie: Movie) => movie.id === likeMovie.id,
+    //       likeMovie
+    //     ),
+    //   })
+    // );
+
+    const state = getState();
+    const findIndex = state.movies.findIndex(
+      (movie: Movie) => movie.id === likeMovie.id
+    );
+    const movieList = [...state.movies];
+    movieList[findIndex] = likeMovie;
+
+    patchState({
+      movies: movieList,
+      movieDetail: likeMovie,
+    });
   }
 
   @Action(DeleteMovie)

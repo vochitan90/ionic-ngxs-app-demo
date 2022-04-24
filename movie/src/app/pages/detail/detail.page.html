@@ -7,7 +7,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="outer-content">
+<!-- <ion-content class="outer-content" *ngIf="$movieDetail | async; let movie"> -->
+<ion-content class="outer-content" *ngIf="movieDetail$ | async as movie">
   <ion-grid fixed style="height: 100vh">
     <ion-row class="ion-align-items-center" style="height: 100vh">
       <ion-col size-lg="6" offset-lg="3" size-md="10" offset-md="1">
@@ -34,12 +35,7 @@
               [src]="movie?.poster"
               height="300px"
               alt="Movie Poster Detail Page"
-            />
-            <img
-              *ngIf="!movie.poster"
-              src="https://in.bmscdn.com/iedb/movies/images/website/poster/large/ela-cheppanu-et00016781-24-03-2017-18-31-40.jpg"
-              height="300px"
-              alt="Empty Movie Poster Detail Page"
+              (error)="handleMissingImage($event)"
             />
           </ion-item>
           <ion-card-content>

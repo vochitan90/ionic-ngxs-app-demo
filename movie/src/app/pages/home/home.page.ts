@@ -3,7 +3,11 @@ import { Select, Store } from '@ngxs/store';
 import { MovieState } from '../../store/state/movies.state';
 import { Observable } from 'rxjs';
 import { Movie } from '../../models/movie.interface';
-import { DeleteMovie, FetchMovies } from '../../store/action/movies.actions';
+import {
+  DeleteMovie,
+  FetchMovies,
+  GetMovieDetail,
+} from '../../store/action/movies.actions';
 import {
   AlertController,
   IonContent,
@@ -58,8 +62,12 @@ export class HomePage implements OnInit {
     this.fetchMovies(this.pagination);
   }
 
-  fetchMovies(pagination: Pagination) {
-    this.store.dispatch(new FetchMovies(pagination));
+  async fetchMovies(pagination: Pagination) {
+    const abc = await this.store
+      .dispatch(new FetchMovies(pagination))
+      .toPromise();
+
+    console.log(abc);
   }
 
   doInfinite(event) {
@@ -83,7 +91,10 @@ export class HomePage implements OnInit {
       'https://wwv.bbtor.net/img/default_thumbnail.svg';
   }
 
-  viewMovieDetails(movie: Movie) {
+  async viewMovieDetails(movie: Movie) {
+    const abc = await this.store
+      .dispatch(new GetMovieDetail(movie.id))
+      .toPromise();
     this.router.navigate(['detail', movie.id]);
   }
 
