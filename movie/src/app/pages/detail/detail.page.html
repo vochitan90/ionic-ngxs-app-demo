@@ -9,8 +9,8 @@
 
 <!-- <ion-content class="outer-content" *ngIf="$movieDetail | async; let movie"> -->
 <ion-content class="outer-content" *ngIf="movieDetail$ | async as movie">
-  <ion-grid fixed style="height: 100vh">
-    <ion-row class="ion-align-items-center" style="height: 100vh">
+  <ion-grid fixed style="height: 50vh">
+    <ion-row class="ion-align-items-center" style="height: 50vh">
       <ion-col size-lg="6" offset-lg="3" size-md="10" offset-md="1">
         <ion-card *ngIf="movie">
           <ion-item lines="none">
@@ -44,16 +44,16 @@
                 <ion-icon name="information-circle-outline"></ion-icon> {{
                 movie?.notes }}
               </p>
-              <ion-badge tappable slot="end" (click)="watchTrailer()"
+              <!-- <ion-badge tappable slot="end" (click)="watchTrailer()"
                 ><ion-icon name="eye"></ion-icon> Trailer</ion-badge
-              >
+              > -->
             </ion-item>
             <ion-row>
               <ion-item *ngIf="movie.cast.length !== 0">
                 <p><ion-icon name="people"></ion-icon> {{ movie?.cast }}</p>
-                <ion-badge tappable slot="end" (click)="showActors()"
+                <!-- <ion-badge tappable slot="end" (click)="showActors()"
                   ><ion-icon name="eye"></ion-icon> Actors</ion-badge
-                >
+                > -->
               </ion-item>
             </ion-row>
           </ion-card-content>
@@ -100,7 +100,7 @@
                 Comment
               </ion-button>
             </ion-col>
-            <ion-col col-auto class="ion-text-center">
+            <!-- <ion-col col-auto class="ion-text-center">
               <ion-button
                 fill="clear"
                 size="small"
@@ -110,8 +110,8 @@
                 <ion-icon name="heart" slot="start"></ion-icon>
                 Favorite
               </ion-button>
-            </ion-col>
-            <ion-col col-auto class="ion-text-center">
+            </ion-col> -->
+            <!-- <ion-col col-auto class="ion-text-center">
               <ion-button
                 fill="clear"
                 size="small"
@@ -121,7 +121,7 @@
                 <ion-icon name="share-social" slot="start"></ion-icon>
                 Share
               </ion-button>
-            </ion-col>
+            </ion-col> -->
           </ion-row>
         </ion-card>
       </ion-col>

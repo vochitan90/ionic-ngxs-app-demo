@@ -24,7 +24,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" *ngIf="movies$ | async">
   <!-- Add movie fab button. -->
   <ion-fab vertical="top" horizontal="end" edge slot="fixed">
     <ion-fab-button size="small" color="secondary" (click)="addMovie()">

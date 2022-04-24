@@ -14,6 +14,7 @@ import {
 } from '@cloudinary/angular-5.x';
 import { Cloudinary } from 'cloudinary-core';
 import { UploadImageService } from 'src/app/services/upload-image.service';
+import { CommentModalComponent } from '../../components/comment-modal/comment-modal.component';
 
 @NgModule({
   imports: [

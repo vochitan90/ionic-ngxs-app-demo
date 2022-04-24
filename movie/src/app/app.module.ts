@@ -12,10 +12,10 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { environment } from 'src/environments/environment';
 import { MovieState } from './store/state/movies.state';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ShowCommentModalComponent } from './components/show-comment-modal/show-comment-modal.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ShowCommentModalComponent],
   entryComponents: [],
   imports: [
     BrowserModule,

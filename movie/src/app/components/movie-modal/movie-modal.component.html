@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="tertiary">
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss(movieForm.value)">
+      <ion-button (click)="dismiss()">
         <ion-icon name="close" color="light"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -109,10 +109,10 @@
         <ion-label position="floating">Notes</ion-label>
         <ion-textarea formControlName="notes"></ion-textarea>
       </ion-item>
-      <ion-item>
+      <!-- <ion-item>
         <ion-label position="floating">URL Poster</ion-label>
         <ion-input type="text" formControlName="poster"></ion-input>
-      </ion-item>
+      </ion-item> -->
       <ion-item class="take-picture">
         <p>
           <b>NOTE</b>: Select movie picture from your device or take a movie

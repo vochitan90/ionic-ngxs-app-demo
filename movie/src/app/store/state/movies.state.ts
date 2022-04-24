@@ -82,7 +82,7 @@ export class MovieState {
 
   @Action(EditMovie)
   async EditMovie(
-    { setState }: StateContext<MoviesStateModel>,
+    { setState, patchState }: StateContext<MoviesStateModel>,
     { payload }
   ): Promise<void> {
     const editMovie = await this.moviesService.editMovie(payload).toPromise();
@@ -94,6 +94,10 @@ export class MovieState {
         ),
       })
     );
+
+    patchState({
+      movieDetail: editMovie,
+    });
   }
 
   @Action(LikeMovie)

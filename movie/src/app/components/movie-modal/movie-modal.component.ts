@@ -49,14 +49,6 @@ export class MovieModalComponent implements OnInit {
       notes: new FormControl(''),
       poster: new FormControl(''),
     });
-
-    // this.movieForm$ = this.store.select((state) => state.catalog.movieForm);
-    // this.movieForm$.subscribe((data) => {
-    //   if (data['model'] !== null && data['status'] === 'PENDING') {
-    //     // Check if the user has added information about a movie but has not inserted it.
-    //     this.movieForm.patchValue(data['model']);
-    //   }
-    // });
   }
 
   ngOnInit(): void {
