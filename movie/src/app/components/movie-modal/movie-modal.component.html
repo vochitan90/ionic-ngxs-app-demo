@@ -104,6 +104,15 @@
           >
         </ion-select>
       </ion-item>
+      <ion-item
+        lines="none"
+        *ngIf="
+          movieForm.get('genre').hasError('required') &&
+          movieForm.get('genre').touched
+        "
+      >
+        <div class="error-message">This field is required.</div>
+      </ion-item>
 
       <ion-item>
         <ion-label position="floating">Notes</ion-label>
@@ -122,7 +131,9 @@
           >Select / Take Picture</ion-button
         >
       </ion-item>
-      <ion-item>
+      <ion-item class="spin">
+        <!-- Bubbles -->
+        <ion-spinner name="bubbles" *ngIf="selectedPhoto"></ion-spinner>
         <ion-img [src]="selectedPhoto"></ion-img>
       </ion-item>
     </ion-list>

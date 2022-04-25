@@ -15,7 +15,6 @@ import {
 
 export interface MoviesStateModel {
   movies: Movie[];
-  movies1: Movie[];
   movieDetail: Movie;
 }
 
@@ -23,7 +22,6 @@ export interface MoviesStateModel {
   name: 'catalog',
   defaults: {
     movies: [],
-    movies1: [],
     movieDetail: null,
   },
 })

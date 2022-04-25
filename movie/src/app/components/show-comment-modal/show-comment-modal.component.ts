@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
+import { Modal } from 'src/app/models/modal.interface';
 
 @Component({
   selector: 'app-show-comment-modal',
@@ -7,7 +8,7 @@ import { ModalController, NavParams } from '@ionic/angular';
   styleUrls: ['./show-comment-modal.component.css'],
 })
 export class ShowCommentModalComponent implements OnInit {
-  modal: any = {
+  modal: Modal = {
     title: '',
   };
 

@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';
 import { Store } from '@ngxs/store';
+import { Modal } from 'src/app/models/modal.interface';
 import { EditMovie } from 'src/app/store/action/movies.actions';
 
 @Component({
@@ -17,7 +18,7 @@ import { EditMovie } from 'src/app/store/action/movies.actions';
 export class CommentModalComponent implements OnInit {
   commentForm: FormGroup;
 
-  modal: any = {
+  modal: Modal = {
     title: '',
   };
 

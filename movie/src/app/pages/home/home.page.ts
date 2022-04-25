@@ -17,7 +17,6 @@ import {
 } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { MovieModalComponent } from 'src/app/components/movie-modal/movie-modal.component';
-import { MoviesService } from '../../services/movies.service';
 import { ToastController } from '@ionic/angular';
 
 export type Pagination = {
@@ -58,16 +57,16 @@ export class HomePage implements OnInit {
     this.iconView = this.iconView === 'apps' ? 'list' : 'apps';
   }
 
+  // ionViewWillEnter() {
+  //   this.fetchMovies(this.pagination);
+  // }
+
   ngOnInit(): void {
     this.fetchMovies(this.pagination);
   }
 
   async fetchMovies(pagination: Pagination) {
-    const abc = await this.store
-      .dispatch(new FetchMovies(pagination))
-      .toPromise();
-
-    console.log(abc);
+    await this.store.dispatch(new FetchMovies(pagination)).toPromise();
   }
 
   doInfinite(event) {
@@ -105,7 +104,7 @@ export class HomePage implements OnInit {
     });
     await modal.present();
 
-    const { data } = await modal.onWillDismiss();
+    const { data } = await modal.onDidDismiss();
     if (data) {
       console.log('data', data);
     }
@@ -153,8 +152,10 @@ export class HomePage implements OnInit {
         {
           text: 'Okay',
           id: 'confirm-button',
-          handler: () => {
-            this.showLoadingAndDelete(movie);
+          handler: async () => {
+            this.showLoading();
+            await this.store.dispatch(new DeleteMovie(movie)).toPromise();
+            this.loadingController.dismiss();
             this.presentToast('Delete successfully!');
           },
         },
@@ -164,7 +165,7 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
-  async showLoadingAndDelete(movie: Movie) {
+  async showLoading() {
     const loading = await this.loadingController.create({
       spinner: null,
       message: 'Please wait...',
@@ -172,10 +173,6 @@ export class HomePage implements OnInit {
       cssClass: 'custom-class custom-loading',
     });
     await loading.present();
-
-    this.store.dispatch(new DeleteMovie(movie));
-
-    await loading.dismiss();
   }
 
   async presentToast(message: string) {
