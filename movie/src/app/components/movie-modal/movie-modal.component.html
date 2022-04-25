@@ -133,7 +133,10 @@
       </ion-item>
       <ion-item class="spin">
         <!-- Bubbles -->
-        <ion-spinner name="bubbles" *ngIf="selectedPhoto"></ion-spinner>
+        <ion-spinner
+          name="bubbles"
+          *ngIf="!selectedPhoto && modal.title === 'Edit Movie'"
+        ></ion-spinner>
         <ion-img [src]="selectedPhoto"></ion-img>
       </ion-item>
     </ion-list>

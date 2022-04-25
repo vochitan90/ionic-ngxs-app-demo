@@ -5,3 +5,18 @@ ion-item img {
 ion-chip {
   height: auto;
 }
+
+.sub-info {
+  .icon {
+    font-size: 25px;
+  }
+
+  .text {
+    font-style: italic;
+  }
+
+  ion-row {
+    align-items: center;
+    padding-left: 12px;
+  }
+}
