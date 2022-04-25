@@ -78,9 +78,9 @@
                 ></ion-icon>
                 {{ movie.likes }} |
               </span>
-              <span *ngIf="movie.rate"
+              <span *ngIf="movie.comments"
                 ><ion-icon name="star" color="tertiary" slot="start"></ion-icon>
-                {{ movie.rate }}</span
+                {{ movie.comments.length }}</span
               >
             </h5>
           </ion-text>

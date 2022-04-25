@@ -73,6 +73,7 @@ export class MovieModalComponent implements OnInit {
   ngOnInit(): void {
     this.modal = { ...this.navParams.data.modalProps };
     if (this.modal.title === 'Edit Movie') {
+      debugger;
       this.movieForm.patchValue(this.modal.movie);
 
       // Set image for src

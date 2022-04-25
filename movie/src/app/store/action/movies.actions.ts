@@ -6,6 +6,7 @@ export enum Actions {
   EditMovie = '[Movie] Edit Movie action',
   DeleteMovie = '[Movie] Delete Movie action',
   LikeMovie = '[Movie] Like Movie action',
+  CommentMovie = '[Movie] Comment Movie action',
 }
 
 export class FetchMovies {
@@ -40,6 +41,12 @@ export class DeleteMovie {
 
 export class LikeMovie {
   static readonly type = Actions.LikeMovie;
+
+  constructor(public payload: Movie) {}
+}
+
+export class CommentMovie {
+  static readonly type = Actions.CommentMovie;
 
   constructor(public payload: Movie) {}
 }

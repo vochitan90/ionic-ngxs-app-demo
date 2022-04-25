@@ -1,8 +1,8 @@
+import { Movie } from './../../models/movie.interface';
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { patch, updateItem, removeItem } from '@ngxs/store/operators';
 import { tap } from 'rxjs/operators';
-import { Movie } from 'src/app/models/movie.interface';
 import { MoviesService } from 'src/app/services/movies.service';
 import {
   FetchMovies,
@@ -11,6 +11,7 @@ import {
   DeleteMovie,
   GetMovieDetail,
   LikeMovie,
+  CommentMovie,
 } from '../action/movies.actions';
 
 export interface MoviesStateModel {
@@ -80,10 +81,20 @@ export class MovieState {
 
   @Action(EditMovie)
   async EditMovie(
-    { setState, patchState }: StateContext<MoviesStateModel>,
+    { setState, patchState, getState }: StateContext<MoviesStateModel>,
     { payload }
   ): Promise<void> {
+    debugger;
+    const state = getState();
+    const { likes, comments } = state.movieDetail;
+
+    payload.likes = likes;
+    if (comments) {
+      payload.comments = comments;
+    }
+
     const editMovie = await this.moviesService.editMovie(payload).toPromise();
+
     setState(
       patch({
         movies: updateItem(
@@ -101,6 +112,38 @@ export class MovieState {
   @Action(LikeMovie)
   async LikeMovie(
     { getState, setState, patchState }: StateContext<MoviesStateModel>,
+    { payload }
+  ): Promise<void> {
+    const likeMovie = await this.moviesService.editMovie(payload).toPromise();
+    // setState(
+    //   patch({
+    //     movies: updateItem(
+    //       (movie: Movie) => movie.id === likeMovie.id,
+    //       likeMovie
+    //     ),
+    //     movieList: updateItem(
+    //       (movie: Movie) => movie.id === likeMovie.id,
+    //       likeMovie
+    //     ),
+    //   })
+    // );
+
+    const state = getState();
+    const findIndex = state.movies.findIndex(
+      (movie: Movie) => movie.id === likeMovie.id
+    );
+    const movieList = [...state.movies];
+    movieList[findIndex] = likeMovie;
+
+    patchState({
+      movies: movieList,
+      movieDetail: likeMovie,
+    });
+  }
+
+  @Action(CommentMovie)
+  async CommentMovie(
+    { getState, patchState }: StateContext<MoviesStateModel>,
     { payload }
   ): Promise<void> {
     const likeMovie = await this.moviesService.editMovie(payload).toPromise();

@@ -119,6 +119,7 @@ export class HomePage implements OnInit {
   }
 
   editMovie(movie: Movie) {
+    // map comments property
     const componentProps = {
       modalProps: {
         title: 'Edit Movie',

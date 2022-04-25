@@ -9,6 +9,9 @@ import { ModalController, NavParams } from '@ionic/angular';
 import { Store } from '@ngxs/store';
 import { Modal } from 'src/app/models/modal.interface';
 import { EditMovie } from 'src/app/store/action/movies.actions';
+import { MovieState } from 'src/app/store/state/movies.state';
+import { CommentMovie } from '../../store/action/movies.actions';
+import { Movie } from '../../models/movie.interface';
 
 @Component({
   selector: 'app-comment-modal',
@@ -18,9 +21,7 @@ import { EditMovie } from 'src/app/store/action/movies.actions';
 export class CommentModalComponent implements OnInit {
   commentForm: FormGroup;
 
-  modal: Modal = {
-    title: '',
-  };
+  modal: Movie;
 
   constructor(
     private modalCtrl: ModalController,
@@ -38,8 +39,16 @@ export class CommentModalComponent implements OnInit {
     });
   }
 
+  // ionViewWillEnter(){
+
+  // }
+
   ngOnInit() {
-    this.modal = { ...this.navParams.data.modalProps };
+    //this.modal = { ...this.navParams.data.modalProps };
+    this.modal = {
+      ...this.store.selectSnapshot(MovieState.getMovieDetail),
+    };
+    console.log(this.modal);
   }
 
   dismiss(message: string) {
@@ -50,11 +59,11 @@ export class CommentModalComponent implements OnInit {
 
   async commentFormSubmit() {
     let comments;
-    let movieToUpdate = { ...this.modal.movie };
-    if (typeof this.modal.movie.comments === 'undefined') {
+    let movieToUpdate = { ...this.modal };
+    if (typeof this.modal.comments === 'undefined') {
       comments = [];
     } else {
-      comments = [...this.modal.movie.comments];
+      comments = [...this.modal.comments];
     }
 
     // if (typeof this.modal.movie.rate === 'undefined') {
@@ -75,7 +84,7 @@ export class CommentModalComponent implements OnInit {
 
     comments.push(this.commentForm.value.comment);
     movieToUpdate.comments = comments;
-    await this.store.dispatch(new EditMovie(movieToUpdate)).toPromise();
+    await this.store.dispatch(new CommentMovie(movieToUpdate)).toPromise();
 
     this.dismiss('added comment');
   }
