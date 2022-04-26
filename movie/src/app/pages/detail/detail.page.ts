@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { GetMovieDetail, LikeMovie } from 'src/app/store/action/movies.actions';
-import { MovieState } from 'src/app/store/state/movies.state';
+import { GetMovieDetail, LikeMovie } from '../../store/action/movies.actions';
+import { MovieState } from '../../store/state/movies.state';
 import { Movie } from '../../models/movie.interface';
 import { ModalController, ToastController } from '@ionic/angular';
-import { CommentModalComponent } from 'src/app/components/comment-modal/comment-modal.component';
-import { ShowCommentModalComponent } from 'src/app/components/show-comment-modal/show-comment-modal.component';
+import { ShowCommentModalComponent } from '../../components/show-comment-modal/show-comment-modal.component';
+import { CommentModalComponent } from '../../components/comment-modal/comment-modal.component';
 
 @Component({
   selector: 'app-detail',

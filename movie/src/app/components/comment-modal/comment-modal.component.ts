@@ -7,9 +7,7 @@ import {
 } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';
 import { Store } from '@ngxs/store';
-import { Modal } from 'src/app/models/modal.interface';
-import { EditMovie } from 'src/app/store/action/movies.actions';
-import { MovieState } from 'src/app/store/state/movies.state';
+import { MovieState } from '../../store/state/movies.state';
 import { CommentMovie } from '../../store/action/movies.actions';
 import { Movie } from '../../models/movie.interface';
 
@@ -59,7 +57,7 @@ export class CommentModalComponent implements OnInit {
 
   async commentFormSubmit() {
     let comments;
-    let movieToUpdate = { ...this.modal };
+    let movieToUpdate = { ...this.modal } as Movie;
     if (typeof this.modal.comments === 'undefined') {
       comments = [];
     } else {

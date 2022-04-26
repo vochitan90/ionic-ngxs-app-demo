@@ -12,7 +12,18 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "@environment/*": ["src/app/environments/*"],
+      "@services/*": ["src/app/services/*"],
+      //"@pipes/*": ["src/app/pipes/*"],
+      "@app/*": ["src/app/*"]
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true,
+    "skipLibCheck": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

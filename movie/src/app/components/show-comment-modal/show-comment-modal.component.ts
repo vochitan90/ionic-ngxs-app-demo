@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { Modal } from 'src/app/models/modal.interface';
+import { Modal } from '../../models/modal.interface';
 
 @Component({
   selector: 'app-show-comment-modal',

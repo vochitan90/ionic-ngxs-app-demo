@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+
 import { Movie } from '../models/movie.interface';
 import { timeout, retry } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

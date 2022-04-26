@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { patch, updateItem, removeItem } from '@ngxs/store/operators';
 import { tap } from 'rxjs/operators';
-import { MoviesService } from 'src/app/services/movies.service';
+import { MoviesService } from '../../services/movies.service';
 import {
   FetchMovies,
   AddMovie,
@@ -13,6 +13,7 @@ import {
   LikeMovie,
   CommentMovie,
 } from '../action/movies.actions';
+import { produce } from 'immer';
 
 export interface MoviesStateModel {
   movies: Movie[];
@@ -109,12 +110,44 @@ export class MovieState {
     });
   }
 
+  // @Action(LikeMovie)
+  // async LikeMovie(
+  //   { getState, setState, patchState }: StateContext<MoviesStateModel>,
+  //   { payload }
+  // ): Promise<void> {
+  //   const likeMovie = await this.moviesService.editMovie(payload).toPromise();
+  //   // setState(
+  //   //   patch({
+  //   //     movies: updateItem(
+  //   //       (movie: Movie) => movie.id === likeMovie.id,
+  //   //       likeMovie
+  //   //     ),
+  //   //     movieList: updateItem(
+  //   //       (movie: Movie) => movie.id === likeMovie.id,
+  //   //       likeMovie
+  //   //     ),
+  //   //   })
+  //   // );
+
+  //   const state = getState();
+  //   const findIndex = state.movies.findIndex(
+  //     (movie: Movie) => movie.id === likeMovie.id
+  //   );
+  //   const movieList = [...state.movies];
+  //   movieList[findIndex] = likeMovie;
+
+  //   patchState({
+  //     movies: movieList,
+  //     movieDetail: likeMovie,
+  //   });
+  // }
+
   @Action(LikeMovie)
   async LikeMovie(
     { getState, setState, patchState }: StateContext<MoviesStateModel>,
     { payload }
   ): Promise<void> {
-    const likeMovie = await this.moviesService.editMovie(payload).toPromise();
+    //const likeMovie = await this.moviesService.editMovie(payload).toPromise();
     // setState(
     //   patch({
     //     movies: updateItem(
@@ -128,17 +161,33 @@ export class MovieState {
     //   })
     // );
 
-    const state = getState();
-    const findIndex = state.movies.findIndex(
-      (movie: Movie) => movie.id === likeMovie.id
-    );
-    const movieList = [...state.movies];
-    movieList[findIndex] = likeMovie;
+    debugger;
 
-    patchState({
-      movies: movieList,
-      movieDetail: likeMovie,
+    const likeMovie = await this.moviesService.editMovie(payload).toPromise();
+
+    const updateLike = produce(getState(), (draft: MoviesStateModel) => {
+      console.log(draft);
+      const findIndex = draft.movies.findIndex(
+        (movie: Movie) => movie.id === likeMovie.id
+      );
+
+      draft.movies[findIndex] = likeMovie;
+      draft.movieDetail = likeMovie;
     });
+
+    setState(updateLike);
+
+    // const state = getState();
+    // const findIndex = state.movies.findIndex(
+    //   (movie: Movie) => movie.id === likeMovie.id
+    // );
+    // const movieList = [...state.movies];
+    // movieList[findIndex] = likeMovie;
+
+    // patchState({
+    //   movies: movieList,
+    //   movieDetail: likeMovie,
+    // });
   }
 
   @Action(CommentMovie)

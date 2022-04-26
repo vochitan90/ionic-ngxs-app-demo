@@ -5,16 +5,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
-import { FilterPipe } from '../../pipes/filter.pipe';
-import { MovieModalComponent } from 'src/app/components/movie-modal/movie-modal.component';
+import { MovieModalComponent } from '../../components/movie-modal/movie-modal.component';
 
 import {
   CloudinaryModule,
   CloudinaryConfiguration,
 } from '@cloudinary/angular-5.x';
 import { Cloudinary } from 'cloudinary-core';
-import { UploadImageService } from 'src/app/services/upload-image.service';
-import { CommentModalComponent } from '../../components/comment-modal/comment-modal.component';
+import { UploadImageService } from '@services/upload-image.service';
+// import { FilterPipe } from '@pipes/filter.pipe';
+import { FilterPipe } from '../../pipes/filter.pipe';
 
 @NgModule({
   imports: [

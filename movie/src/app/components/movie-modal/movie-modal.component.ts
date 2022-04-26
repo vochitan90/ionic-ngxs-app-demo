@@ -6,11 +6,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { ModalController, NavParams, ToastController } from '@ionic/angular';
-import { Store } from '@ngxs/store';
-import { AddMovie, EditMovie } from 'src/app/store/action/movies.actions';
+import { Store, Action } from '@ngxs/store';
+import { AddMovie, EditMovie } from '../../store/action/movies.actions';
 import { Modal } from '../../models/modal.interface';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { UploadImageService } from '../../services/upload-image.service';
+import { UploadImageService } from '@services/upload-image.service';
 
 @Component({
   selector: 'app-movie-modal',

@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { DetailPageRoutingModule } from './detail-routing.module';
 
 import { DetailPage } from './detail.page';
-import { CommentModalComponent } from 'src/app/components/comment-modal/comment-modal.component';
+import { CommentModalComponent } from '../../components/comment-modal/comment-modal.component';
+import { ShowCommentModalComponent } from 'src/app/components/show-comment-modal/show-comment-modal.component';
 
 @NgModule({
   imports: [

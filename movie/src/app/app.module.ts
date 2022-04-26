@@ -10,7 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 import { MovieState } from './store/state/movies.state';
 import { ShowCommentModalComponent } from './components/show-comment-modal/show-comment-modal.component';
 

@@ -16,7 +16,7 @@ import {
   ModalController,
 } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { MovieModalComponent } from 'src/app/components/movie-modal/movie-modal.component';
+import { MovieModalComponent } from '../../components/movie-modal/movie-modal.component';
 import { ToastController } from '@ionic/angular';
 
 export type Pagination = {
@@ -65,8 +65,8 @@ export class HomePage implements OnInit {
     this.fetchMovies(this.pagination);
   }
 
-  async fetchMovies(pagination: Pagination) {
-    await this.store.dispatch(new FetchMovies(pagination)).toPromise();
+  fetchMovies(pagination: Pagination) {
+    this.store.dispatch(new FetchMovies(pagination));
   }
 
   doInfinite(event) {
