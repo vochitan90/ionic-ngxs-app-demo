@@ -2,7 +2,7 @@ import { Movie } from './../../models/movie.interface';
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { patch, updateItem, removeItem } from '@ngxs/store/operators';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { MoviesService } from '../../services/movies.service';
 import {
   FetchMovies,
@@ -14,6 +14,7 @@ import {
   CommentMovie,
 } from '../action/movies.actions';
 import { produce } from 'immer';
+import { of } from 'rxjs';
 
 export interface MoviesStateModel {
   movies: Movie[];
@@ -59,12 +60,15 @@ export class MovieState {
   ) {
     const { start, end } = payload;
     return this.moviesService.getMovies(start, end).pipe(
-      tap((moviesRes) => {
-        const state = getState();
-        patchState({
-          movies: [...state.movies, ...moviesRes],
-        });
-      })
+      tap(
+        (moviesRes) => {
+          const state = getState();
+          patchState({
+            movies: [...state.movies, ...moviesRes],
+          });
+        },
+        catchError((_) => of('Can not load movies'))
+      )
     );
   }
 

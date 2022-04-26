@@ -3,11 +3,7 @@ import { Select, Store } from '@ngxs/store';
 import { MovieState } from '../../store/state/movies.state';
 import { Observable } from 'rxjs';
 import { Movie } from '../../models/movie.interface';
-import {
-  DeleteMovie,
-  FetchMovies,
-  GetMovieDetail,
-} from '../../store/action/movies.actions';
+import { DeleteMovie, FetchMovies } from '../../store/action/movies.actions';
 import {
   AlertController,
   IonContent,
@@ -58,7 +54,7 @@ export class HomePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.fetchMovies(this.pagination);
+    //this.fetchMovies(this.pagination);
   }
 
   ngOnInit(): void {
@@ -71,7 +67,7 @@ export class HomePage implements OnInit {
       .toPromise()
       .catch((error) => {
         console.log(error);
-        this.presentToast('Can not load movies', 'error');
+        this.presentToast('Can not load movies', 'danger');
       });
   }
 
@@ -190,7 +186,7 @@ export class HomePage implements OnInit {
   async presentToast(message: string, color = 'success') {
     const toast = await this.toastController.create({
       message: message,
-      duration: 2000,
+      duration: 4000,
       icon: 'information-circle',
       animated: true,
       color: color,
