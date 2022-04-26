@@ -57,16 +57,22 @@ export class HomePage implements OnInit {
     this.iconView = this.iconView === 'apps' ? 'list' : 'apps';
   }
 
-  // ionViewWillEnter() {
-  //   this.fetchMovies(this.pagination);
-  // }
+  ionViewWillEnter() {
+    this.fetchMovies(this.pagination);
+  }
 
   ngOnInit(): void {
     this.fetchMovies(this.pagination);
   }
 
   fetchMovies(pagination: Pagination) {
-    this.store.dispatch(new FetchMovies(pagination));
+    this.store
+      .dispatch(new FetchMovies(pagination))
+      .toPromise()
+      .catch((error) => {
+        console.log(error);
+        this.presentToast('Can not load movies', 'error');
+      });
   }
 
   doInfinite(event) {
@@ -90,10 +96,15 @@ export class HomePage implements OnInit {
       'https://wwv.bbtor.net/img/default_thumbnail.svg';
   }
 
-  async viewMovieDetails(movie: Movie) {
-    const abc = await this.store
-      .dispatch(new GetMovieDetail(movie.id))
-      .toPromise();
+  viewMovieDetails(movie: Movie) {
+    // this.store
+    //   .dispatch(new GetMovieDetail(movie.id))
+    //   .toPromise()
+    //   .then((res) => {
+
+    //   })
+    //   .catch((error) => {});
+
     this.router.navigate(['detail', movie.id]);
   }
 
@@ -176,13 +187,13 @@ export class HomePage implements OnInit {
     await loading.present();
   }
 
-  async presentToast(message: string) {
+  async presentToast(message: string, color = 'success') {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000,
       icon: 'information-circle',
       animated: true,
-      color: 'success',
+      color: color,
       cssClass: 'movie-modal',
     });
     toast.present();

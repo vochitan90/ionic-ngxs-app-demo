@@ -161,8 +161,6 @@ export class MovieState {
     //   })
     // );
 
-    debugger;
-
     const likeMovie = await this.moviesService.editMovie(payload).toPromise();
 
     const updateLike = produce(getState(), (draft: MoviesStateModel) => {
@@ -195,7 +193,9 @@ export class MovieState {
     { getState, patchState }: StateContext<MoviesStateModel>,
     { payload }
   ): Promise<void> {
-    const likeMovie = await this.moviesService.editMovie(payload).toPromise();
+    const commentMovie = await this.moviesService
+      .editMovie(payload)
+      .toPromise();
     // setState(
     //   patch({
     //     movies: updateItem(
@@ -209,16 +209,17 @@ export class MovieState {
     //   })
     // );
 
+    debugger;
     const state = getState();
     const findIndex = state.movies.findIndex(
-      (movie: Movie) => movie.id === likeMovie.id
+      (movie: Movie) => movie.id === commentMovie.id
     );
     const movieList = [...state.movies];
-    movieList[findIndex] = likeMovie;
+    movieList[findIndex] = commentMovie;
 
     patchState({
       movies: movieList,
-      movieDetail: likeMovie,
+      movieDetail: commentMovie,
     });
   }
 

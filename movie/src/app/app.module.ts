@@ -15,7 +15,7 @@ import { MovieState } from './store/state/movies.state';
 import { ShowCommentModalComponent } from './components/show-comment-modal/show-comment-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, ShowCommentModalComponent],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,

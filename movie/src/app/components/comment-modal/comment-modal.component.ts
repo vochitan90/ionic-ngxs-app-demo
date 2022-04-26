@@ -46,7 +46,6 @@ export class CommentModalComponent implements OnInit {
     this.modal = {
       ...this.store.selectSnapshot(MovieState.getMovieDetail),
     };
-    console.log(this.modal);
   }
 
   dismiss(message: string) {

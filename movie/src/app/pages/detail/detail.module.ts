@@ -8,7 +8,7 @@ import { DetailPageRoutingModule } from './detail-routing.module';
 
 import { DetailPage } from './detail.page';
 import { CommentModalComponent } from '../../components/comment-modal/comment-modal.component';
-import { ShowCommentModalComponent } from 'src/app/components/show-comment-modal/show-comment-modal.component';
+import { ShowCommentModalComponent } from '../../components/show-comment-modal/show-comment-modal.component';
 
 @NgModule({
   imports: [
@@ -18,6 +18,6 @@ import { ShowCommentModalComponent } from 'src/app/components/show-comment-modal
     DetailPageRoutingModule,
     ReactiveFormsModule,
   ],
-  declarations: [DetailPage, CommentModalComponent],
+  declarations: [DetailPage, CommentModalComponent, ShowCommentModalComponent],
 })
 export class DetailPageModule {}

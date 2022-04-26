@@ -34,5 +34,7 @@ const config: Config.InitialOptions = {
   transformIgnorePatterns: [
     'node_modules/(?!(@angular|@ngneat/until-destroy|date-fns|@mobi/rwc-b2c-components-ng-jslib|ngx-spinner|@sweetalert2/ngx-sweetalert2))',
   ],
+  //testRunner: 'jest-circus/runner',
+  testTimeout: 20000,
 };
 export default config;

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Cloudinary } from '@cloudinary/angular-5.x';
 import { v4 as uuidv4 } from 'uuid';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
