@@ -1,8 +1,7 @@
+import { UploadImageService } from '@services/upload-image.service';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Cloudinary, CloudinaryConfiguration } from '@cloudinary/angular-5.x';
-
-import { UploadImageService } from './upload-image.service';
 
 describe('UploadImageService', () => {
   let service: UploadImageService;

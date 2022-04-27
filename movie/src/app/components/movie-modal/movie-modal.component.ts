@@ -10,7 +10,7 @@ import { Store, Action } from '@ngxs/store';
 import { AddMovie, EditMovie } from '../../store/action/movies.actions';
 import { Modal } from '../../models/modal.interface';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { UploadImageService } from '@services/upload-image.service';
+import { UploadImageService } from '@app/services/upload-image.service';
 
 @Component({
   selector: 'app-movie-modal',
@@ -73,9 +73,7 @@ export class MovieModalComponent implements OnInit {
   ngOnInit(): void {
     this.modal = { ...this.navParams.data.modalProps };
     if (this.modal.title === 'Edit Movie') {
-      debugger;
       this.movieForm.patchValue(this.modal.movie);
-
       // Set image for src
       this.selectedPhoto = this.modal.movie?.poster;
     }

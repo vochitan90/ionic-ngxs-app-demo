@@ -92,7 +92,7 @@ export class HomePage implements OnInit {
       'https://wwv.bbtor.net/img/default_thumbnail.svg';
   }
 
-  viewMovieDetails(movie: Movie) {
+  viewMovieDetails(id: string) {
     // this.store
     //   .dispatch(new GetMovieDetail(movie.id))
     //   .toPromise()
@@ -101,7 +101,7 @@ export class HomePage implements OnInit {
     //   })
     //   .catch((error) => {});
 
-    this.router.navigate(['detail', movie.id]);
+    this.router.navigate(['detail', id]);
   }
 
   async presentModal(componentProps: any, component) {

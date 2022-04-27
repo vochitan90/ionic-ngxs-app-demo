@@ -23,7 +23,6 @@ export class MoviesService {
           this.URL_BASE +
             `movies?_start=${start}&_end=${end}&_sort=year,title&_order=desc,asc`
         )
-        .pipe(retry(1), timeout(5000))
     );
   }
 
@@ -32,7 +31,6 @@ export class MoviesService {
       this.http
         // Type-checking the response => .get<Movie[]>
         .get<Movie>(this.URL_BASE + `movies/${id}`)
-        .pipe(retry(1), timeout(5000))
     );
   }
 

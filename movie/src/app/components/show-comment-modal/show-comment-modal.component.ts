@@ -16,7 +16,6 @@ export class ShowCommentModalComponent implements OnInit {
   constructor(private modalCtrl: ModalController, private store: Store) {}
 
   ngOnInit() {
-    debugger;
     if (this.store.selectSnapshot(MovieState.getMovieDetail)) {
       this.movie = {
         ...this.store.selectSnapshot(MovieState.getMovieDetail),

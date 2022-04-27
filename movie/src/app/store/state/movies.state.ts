@@ -89,7 +89,6 @@ export class MovieState {
     { setState, patchState, getState }: StateContext<MoviesStateModel>,
     { payload }
   ): Promise<void> {
-    debugger;
     const state = getState();
     const { likes, comments } = state.movieDetail;
 
@@ -213,7 +212,6 @@ export class MovieState {
     //   })
     // );
 
-    debugger;
     const state = getState();
     const findIndex = state.movies.findIndex(
       (movie: Movie) => movie.id === commentMovie.id
