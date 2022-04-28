@@ -17,13 +17,13 @@
             <h3 style="margin: auto 0px"><b>{{ movie?.title }}</b></h3>
             <ion-chip color="tertiary" slot="end">
               <ion-icon
-                *ngIf="!movie.genreImage"
+                *ngIf="!movie?.genreImage"
                 name="pricetag"
                 color="tertiary"
               ></ion-icon>
               <ion-img
-                *ngIf="movie.genreImage"
-                [src]="movie.genreImage"
+                *ngIf="movie?.genreImage"
+                [src]="movie?.genreImage"
                 class="genre-image"
               ></ion-img>
               <ion-label>{{ movie?.genre }}</ion-label>
@@ -36,13 +36,14 @@
             style="padding-top: 10px"
           >
             <img
-              *ngIf="movie.poster"
+              *ngIf="movie?.poster"
               [src]="movie?.poster"
               height="300px"
               alt="Movie Poster Detail Page"
               (error)="handleMissingImage($event)"
             />
           </ion-item>
+
           <ion-card-content class="sub-info ion-no-padding">
             <ion-item *ngIf="movie?.notes" class="ion-no-padding">
               <ion-grid>
@@ -60,7 +61,7 @@
               </ion-grid>
             </ion-item>
 
-            <ion-item *ngIf="movie.cast.length !== 0" class="ion-no-padding">
+            <ion-item *ngIf="movie?.cast" class="ion-no-padding">
               <ion-grid>
                 <ion-row>
                   <ion-col size="2">
@@ -74,17 +75,20 @@
             </ion-item>
           </ion-card-content>
 
-          <!-- begin like comment amount -->
+          <!-- begin like comment amount no click -->
           <ion-row>
             <ion-item style="width: 100%" class="ion-no-padding">
-              <ion-button small *ngIf="movie.likes" style="margin-left: 12px">
+              <!-- begin likes -->
+              <ion-button small *ngIf="movie?.likes" style="margin-left: 12px">
                 <ion-icon slot="start" name="thumbs-up"></ion-icon>
                 {{ movie?.likes }} Likes
               </ion-button>
+
+              <!-- begin comment -->
               <ion-button
                 style="padding-right: 10px"
                 small
-                *ngIf="movie.comments"
+                *ngIf="movie?.comments.length > 0"
                 (click)="onClickShowComment()"
               >
                 <ion-icon slot="start" name="chatbubble-ellipses"></ion-icon>

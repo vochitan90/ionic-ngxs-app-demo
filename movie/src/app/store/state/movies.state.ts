@@ -56,10 +56,9 @@ export class MovieState {
   @Action(FetchMovies)
   fetchMovies(
     { getState, patchState }: StateContext<MoviesStateModel>,
-    { payload }
+    { pageNumber }
   ) {
-    const { start, end } = payload;
-    return this.moviesService.getMovies(start, end).pipe(
+    return this.moviesService.getMovies(pageNumber).pipe(
       tap(
         (moviesRes) => {
           const state = getState();
@@ -77,7 +76,12 @@ export class MovieState {
     { getState, patchState }: StateContext<MoviesStateModel>,
     { payload }
   ): Promise<void> {
+    payload.likes = 0;
+    payload.comments = [];
     const newMovie = await this.moviesService.addMovie(payload).toPromise();
+    newMovie.likes = 0;
+    newMovie.comments = [];
+    debugger;
     const state = getState();
     patchState({
       movies: [...state.movies, newMovie],

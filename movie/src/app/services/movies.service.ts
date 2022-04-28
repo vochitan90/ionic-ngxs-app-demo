@@ -15,14 +15,11 @@ export class MoviesService {
 
   constructor(private http: HttpClient) {}
 
-  getMovies(start: number, end: number): Observable<Movie[]> {
+  getMovies(pageNumber: number): Observable<Movie[]> {
     return (
       this.http
         // Type-checking the response => .get<Movie[]>
-        .get<Movie[]>(
-          this.URL_BASE +
-            `movies?_start=${start}&_end=${end}&_sort=year,title&_order=desc,asc`
-        )
+        .get<Movie[]>(this.URL_BASE + `movies?page=${pageNumber}&limit=10`)
     );
   }
 
@@ -35,15 +32,17 @@ export class MoviesService {
   }
 
   addMovie(movie: Movie): Observable<Movie> {
-    movie['id'] = uuidv4();
+    debugger;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
     };
-    return this.http
-      .post<Movie>(encodeURI(this.URL_BASE) + `movies/`, movie, httpOptions)
-      .pipe(retry(1), timeout(5000));
+    return this.http.post<Movie>(
+      encodeURI(this.URL_BASE) + `movies/`,
+      movie,
+      httpOptions
+    );
   }
 
   editMovie(movie: Movie): Observable<Movie> {

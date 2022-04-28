@@ -12,7 +12,7 @@ export enum Actions {
 export class FetchMovies {
   static readonly type = Actions.FetchMovies;
 
-  constructor(public payload: { start: number; end: number }) {}
+  constructor(public pageNumber: number) {}
 }
 
 export class GetMovieDetail {

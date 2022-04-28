@@ -15,11 +15,6 @@ import { Router } from '@angular/router';
 import { MovieModalComponent } from '../../components/movie-modal/movie-modal.component';
 import { ToastController } from '@ionic/angular';
 
-export type Pagination = {
-  start: number;
-  end: number;
-};
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -31,10 +26,7 @@ export class HomePage implements OnInit {
 
   @Select(MovieState.getMovies) movies$: Observable<Movie[]>;
 
-  pagination: Pagination = {
-    start: 0,
-    end: 20,
-  };
+  pageNumber = 1;
 
   iconView = 'apps';
 
@@ -58,12 +50,12 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchMovies(this.pagination);
+    this.fetchMovies(this.pageNumber);
   }
 
-  fetchMovies(pagination: Pagination) {
+  fetchMovies(pageNumber: number) {
     this.store
-      .dispatch(new FetchMovies(pagination))
+      .dispatch(new FetchMovies(pageNumber))
       .toPromise()
       .catch((error) => {
         console.log(error);
@@ -75,10 +67,9 @@ export class HomePage implements OnInit {
     setTimeout(() => {
       event.target.complete();
       //this.showSkeleton = true;
-      this.pagination.start = this.pagination.end;
-      this.pagination.end += 20;
+      this.pageNumber = this.pageNumber + 1;
       this.showScrollTop = true;
-      this.fetchMovies(this.pagination);
+      this.fetchMovies(this.pageNumber);
     }, 500);
   }
 

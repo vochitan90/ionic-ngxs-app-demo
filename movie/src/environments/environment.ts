@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API_URL_BASE: 'http://localhost:3000/',
+  //API_URL_BASE: 'http://localhost:3000/',
+  API_URL_BASE: 'https://626a5c7853916a0fbdf9f324.mockapi.io/',
 };
 
 /*
