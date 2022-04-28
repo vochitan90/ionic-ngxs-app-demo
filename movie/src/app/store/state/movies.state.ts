@@ -94,11 +94,12 @@ export class MovieState {
     { payload }
   ): Promise<void> {
     const state = getState();
-    const { likes, comments } = state.movieDetail;
-
-    payload.likes = likes;
-    if (comments) {
-      payload.comments = comments;
+    if (state.movieDetail) {
+      const { likes, comments } = state.movieDetail;
+      payload.likes = likes;
+      if (comments) {
+        payload.comments = comments;
+      }
     }
 
     const editMovie = await this.moviesService.editMovie(payload).toPromise();

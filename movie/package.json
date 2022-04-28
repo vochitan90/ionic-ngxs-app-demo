@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npx cap sync",
+    "build": "ng build && npx cap sync && ionic capacitor run ios",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
@@ -25,6 +25,7 @@
     "@capacitor/app": "1.1.1",
     "@capacitor/camera": "^1.3.1",
     "@capacitor/core": "^3.4.3",
+    "@capacitor/filesystem": "^1.1.0",
     "@capacitor/haptics": "1.1.4",
     "@capacitor/ios": "3.5.0",
     "@capacitor/keyboard": "1.2.2",

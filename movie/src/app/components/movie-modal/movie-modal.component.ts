@@ -5,7 +5,12 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ModalController, NavParams, ToastController } from '@ionic/angular';
+import {
+  LoadingController,
+  ModalController,
+  NavParams,
+  ToastController,
+} from '@ionic/angular';
 import { Store, Action } from '@ngxs/store';
 import { AddMovie, EditMovie } from '../../store/action/movies.actions';
 import { Modal } from '../../models/modal.interface';
@@ -52,7 +57,8 @@ export class MovieModalComponent implements OnInit {
     public navParams: NavParams,
     private store: Store,
     public toastController: ToastController,
-    private uploadImageService: UploadImageService
+    private uploadImageService: UploadImageService,
+    private loadingController: LoadingController
   ) {
     this.createForm();
   }
@@ -100,12 +106,16 @@ export class MovieModalComponent implements OnInit {
   async movieFormSubmit() {
     await this.updatePoster();
     if (this.navParams.data.option === 'add') {
-      this.store.dispatch(new AddMovie(this.movieForm.value));
+      await this.presentLoading();
+      await this.store.dispatch(new AddMovie(this.movieForm.value));
       this.clearMovieForm();
-      this.presentToast('Add successfully!');
+      this.loadingController.dismiss();
+      await this.presentToast('Add successfully!');
     } else if (this.navParams.data.option === 'edit') {
-      this.store.dispatch(new EditMovie(this.movieForm.value));
-      this.presentToast('Update successfully!');
+      await this.presentLoading();
+      await this.store.dispatch(new EditMovie(this.movieForm.value));
+      this.loadingController.dismiss();
+      await this.presentToast('Update successfully!');
     }
 
     this.dismiss();
@@ -125,6 +135,20 @@ export class MovieModalComponent implements OnInit {
       cssClass: 'movie-modal',
     });
     toast.present();
+  }
+
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      spinner: null,
+      message: 'Processing please wait ...',
+      translucent: true,
+      cssClass: 'custom-class custom-loading',
+      backdropDismiss: true,
+    });
+    await loading.present();
+
+    // const { role, data } = await loading.onDidDismiss();
+    // console.log('Loading dismissed with role:', role);
   }
 
   async takePicture() {
