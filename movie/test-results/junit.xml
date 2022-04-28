@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="1" failures="0" errors="0" time="67.015">
-  <testsuite name="MovieState" errors="0" failures="0" skipped="0" timestamp="2022-04-27T11:20:38" time="63.048" tests="1">
-    <testcase classname="MovieState should add movies successfully" name="MovieState should add movies successfully" time="59.326">
+<testsuites name="jest tests" tests="1" failures="0" errors="0" time="4.233">
+  <testsuite name="MovieState" errors="0" failures="0" skipped="0" timestamp="2022-04-28T02:10:30" time="2.994" tests="1">
+    <testcase classname="MovieState should add movies successfully" name="MovieState should add movies successfully" time="0.025">
     </testcase>
   </testsuite>
 </testsuites>

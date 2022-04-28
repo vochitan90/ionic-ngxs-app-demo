@@ -14,7 +14,7 @@
       <ion-col size-lg="6" offset-lg="3" size-md="10" offset-md="1">
         <ion-card *ngIf="movie">
           <ion-item lines="none">
-            <h2 style="margin: auto 0px"><b>{{ movie?.title }}</b></h2>
+            <h3 style="margin: auto 0px"><b>{{ movie?.title }}</b></h3>
             <ion-chip color="tertiary" slot="end">
               <ion-icon
                 *ngIf="!movie.genreImage"
@@ -29,7 +29,12 @@
               <ion-label>{{ movie?.genre }}</ion-label>
             </ion-chip>
           </ion-item>
-          <ion-item lines="none" class="poster" class="ion-no-padding">
+          <ion-item
+            lines="none"
+            class="poster"
+            class="ion-no-padding"
+            style="padding-top: 10px"
+          >
             <img
               *ngIf="movie.poster"
               [src]="movie?.poster"

@@ -15,6 +15,19 @@ describe('MovieState', () => {
 
   let httpTestingController: HttpTestingController;
 
+  const mockMovie = {
+    title: 'After Dark in Central Park',
+    year: 1900,
+    director: '',
+    cast: '',
+    genre: 'Action',
+    notes:
+      'At the opening of this picture, a couple are seen in dim outlines, spooning on a park bench. In comes a policeman, armed with a dark-lantern, which he suddenly flashes on the couple. They cease their love-making, in great confusion, and the policeman walks on, but as soon as he is out of sight, the couple commence billing and cooing again. This picture is particularly interesting because of the photographic effect of the sudden flashing of a dark lantern on the couple. It is very cleverly worked out, and the picture has made a big hit wherever it has been shown.',
+    poster:
+      'https://in.bmscdn.com/iedb/movies/images/website/poster/large/ela-cheppanu-et00016781-24-03-2017-18-31-40.jpg',
+    id: 'f576523c-fe61-441c-ab8d-4e443a3387d2',
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -32,19 +45,6 @@ describe('MovieState', () => {
   it('should add movies successfully', async () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
 
-    const mockMovie = {
-      title: 'After Dark in Central Park',
-      year: 1900,
-      director: '',
-      cast: '',
-      genre: 'Action',
-      notes:
-        'At the opening of this picture, a couple are seen in dim outlines, spooning on a park bench. In comes a policeman, armed with a dark-lantern, which he suddenly flashes on the couple. They cease their love-making, in great confusion, and the policeman walks on, but as soon as he is out of sight, the couple commence billing and cooing again. This picture is particularly interesting because of the photographic effect of the sudden flashing of a dark lantern on the couple. It is very cleverly worked out, and the picture has made a big hit wherever it has been shown.',
-      poster:
-        'https://in.bmscdn.com/iedb/movies/images/website/poster/large/ela-cheppanu-et00016781-24-03-2017-18-31-40.jpg',
-      id: 'f576523c-fe61-441c-ab8d-4e443a3387d2',
-    };
-
     jest
       .spyOn(TestBed.inject(MoviesService), 'addMovie')
       .mockReturnValueOnce(of(mockMovie));
@@ -53,8 +53,6 @@ describe('MovieState', () => {
 
     const listMovie = store.selectSnapshot(MovieState.getMovies);
 
-    console.log(listMovie);
-
-    expect(listMovie).toBeDefined();
+    expect(listMovie.length).toEqual(1);
   });
 });

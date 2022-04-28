@@ -11,7 +11,7 @@
 
 <ion-content class="outer-content ion-padding" *ngIf="movie?.comments">
   <ion-list>
-    <ion-item *ngFor="let comment of movie.comments">
+    <ion-item *ngFor="let comment of movie.comments.slice().reverse()">
       <ion-avatar slot="start">
         <img
           src="https://cdn1.iconfinder.com/data/icons/unique-round-blue/93/user-512.png"

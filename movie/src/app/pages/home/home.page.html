@@ -79,7 +79,11 @@
                 {{ movie.likes }} |
               </span>
               <span *ngIf="movie.comments"
-                ><ion-icon name="star" color="tertiary" slot="start"></ion-icon>
+                ><ion-icon
+                  name="chatbubble-ellipses"
+                  color="tertiary"
+                  slot="start"
+                ></ion-icon>
                 {{ movie.comments.length }}</span
               >
             </h5>
