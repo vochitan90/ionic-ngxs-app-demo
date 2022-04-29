@@ -5,7 +5,7 @@
 - ionic serve 
 
 2. Back end:
-- Cd to json-server folder then run json-server --watch db.json
+- No need => i'm using mockio api
 
 FEATURES
 
