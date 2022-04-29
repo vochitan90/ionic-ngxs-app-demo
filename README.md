@@ -9,15 +9,15 @@
 
 FEATURES
 
-  1. Home page
-    - Load all movies 
-    - Can search
-    - Scroll to top
-    - Add new movie
-    - Slide to left to open edit and delete movie
-    (* Note in the new/edit form we can select or take a picture) 
+1. Home page: 
+- Load all movies 
+- Can search
+- Scroll to top
+- Add new movie
+- Slide to left to open edit and delete movie
+  (* Note in the new/edit form we can select or take a picture) 
 
-  2. Detail page 
-    - Show detai movie 
-    - Can like and comment
+2. Detail page:
+- Show detai movie 
+- Can like and comment
 
