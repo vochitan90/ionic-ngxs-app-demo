@@ -9,13 +9,22 @@ import {
   LoadingController,
   ModalController,
   NavParams,
+  Platform,
   ToastController,
 } from '@ionic/angular';
 import { Store, Action } from '@ngxs/store';
 import { AddMovie, EditMovie } from '../../store/action/movies.actions';
 import { Modal } from '../../models/modal.interface';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import {
+  Camera,
+  CameraResultType,
+  CameraSource,
+  Photo,
+} from '@capacitor/camera';
 import { UploadImageService } from '@app/services/upload-image.service';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+
+import { FileSytemUtil, LocalFile } from '@app/utils/file-system.util';
 
 @Component({
   selector: 'app-movie-modal',
@@ -31,6 +40,8 @@ export class MovieModalComponent implements OnInit {
   movieForm: FormGroup;
 
   selectedPhoto: string;
+
+  IMAGE_DIR = 'stored-images';
 
   genres = [
     { name: 'Action' },
@@ -51,6 +62,10 @@ export class MovieModalComponent implements OnInit {
     { id: 11, name: 'Westerns' },
   ];
 
+  images: LocalFile[] = [];
+
+  fileSytem = new FileSytemUtil(this.plt, this.loadingController);
+
   constructor(
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController,
@@ -58,7 +73,8 @@ export class MovieModalComponent implements OnInit {
     private store: Store,
     public toastController: ToastController,
     private uploadImageService: UploadImageService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private plt: Platform
   ) {
     this.createForm();
   }
@@ -74,6 +90,8 @@ export class MovieModalComponent implements OnInit {
       notes: new FormControl(''),
       poster: new FormControl(''),
     });
+
+    this.fileSytem.loadFiles();
   }
 
   ngOnInit(): void {
@@ -90,29 +108,46 @@ export class MovieModalComponent implements OnInit {
   }
 
   async updatePoster() {
-    if (this.selectedPhoto) {
-      const { secure_url } =
-        await this.uploadImageService.uploadImageToCloudinary(
-          this.movieForm.value.title,
-          this.selectedPhoto
-        );
+    // way 1
+    // if (this.selectedPhoto) {
+    //   const { secure_url } =
+    //     await this.uploadImageService.uploadImageToCloudinary(
+    //       this.movieForm.value.title,
+    //       this.selectedPhoto
+    //     );
 
-      this.movieForm.patchValue({
-        poster: secure_url,
-      });
-    }
+    //   this.movieForm.patchValue({
+    //     poster: secure_url,
+    //   });
+    // }
+
+    // way 2: read file from file system
+
+    const fileInfo = await this.fileSytem.loadSingleFileByName(
+      this.fileSytem.getFileName
+    );
+
+    const { secure_url } =
+      await this.uploadImageService.uploadImageToCloudinary(
+        this.movieForm.value.title,
+        fileInfo
+      );
+
+    this.movieForm.patchValue({
+      poster: secure_url,
+    });
   }
 
   async movieFormSubmit() {
+    await this.presentLoading();
     await this.updatePoster();
+
     if (this.navParams.data.option === 'add') {
-      await this.presentLoading();
       await this.store.dispatch(new AddMovie(this.movieForm.value));
       this.clearMovieForm();
       this.loadingController.dismiss();
       await this.presentToast('Add successfully!');
     } else if (this.navParams.data.option === 'edit') {
-      await this.presentLoading();
       await this.store.dispatch(new EditMovie(this.movieForm.value));
       this.loadingController.dismiss();
       await this.presentToast('Update successfully!');
@@ -139,25 +174,61 @@ export class MovieModalComponent implements OnInit {
 
   async presentLoading() {
     const loading = await this.loadingController.create({
-      spinner: null,
-      message: 'Processing please wait ...',
+      message: 'Processing data please wait ...',
       translucent: true,
       cssClass: 'custom-class custom-loading',
       backdropDismiss: true,
     });
     await loading.present();
-
-    // const { role, data } = await loading.onDidDismiss();
-    // console.log('Loading dismissed with role:', role);
   }
 
-  async takePicture() {
-    const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Base64,
-      source: CameraSource.Camera,
-      quality: 60,
-    });
+  async selectImage() {
+    this.selectedPhoto = await (await this.fileSytem.selectImage()).base64Data;
+  }
 
-    this.selectedPhoto = `data:image/jpeg;base64,${capturedPhoto.base64String}`;
+  async loadFiles() {
+    await this.fileSytem.loadFiles();
+    this.images = this.fileSytem.getImages;
+  }
+
+  async startUpload(file: LocalFile) {
+    //   const response = await fetch(file.data);
+    //   const blob = await response.blob();
+    //   const formData = new FormData();
+    //   formData.append('file', blob, file.name);
+    //   this.uploadData(formData);
+  }
+
+  // Upload the formData to our API
+  async uploadData(formData: FormData) {
+    // const loading = await this.loadingController.create({
+    //   message: 'Uploading image...',
+    // });
+    // await loading.present();
+    // // Use your own API!
+    // const url = 'http://localhost:8888/images/upload.php';
+    // this.http
+    //   .post(url, formData)
+    //   .pipe(
+    //     finalize(() => {
+    //       loading.dismiss();
+    //     })
+    //   )
+    //   .subscribe((res) => {
+    //     if (res['success']) {
+    //       this.presentToast('File upload complete.');
+    //     } else {
+    //       this.presentToast('File upload failed.');
+    //     }
+    //   });
+  }
+
+  async deleteImage(file: LocalFile) {
+    await Filesystem.deleteFile({
+      directory: Directory.Data,
+      path: file.path,
+    });
+    this.loadFiles();
+    this.presentToast('File removed.');
   }
 }

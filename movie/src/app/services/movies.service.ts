@@ -19,7 +19,10 @@ export class MoviesService {
     return (
       this.http
         // Type-checking the response => .get<Movie[]>
-        .get<Movie[]>(this.URL_BASE + `movies?page=${pageNumber}&limit=10`)
+        .get<Movie[]>(
+          this.URL_BASE +
+            `movies?page=${pageNumber}&limit=10&sortBy=createdAt&order=desc`
+        )
     );
   }
 
@@ -32,7 +35,6 @@ export class MoviesService {
   }
 
   addMovie(movie: Movie): Observable<Movie> {
-    debugger;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

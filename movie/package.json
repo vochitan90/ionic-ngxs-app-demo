@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npx cap sync && ionic capacitor run ios",
+    "build": "ng build && npx cap sync",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",

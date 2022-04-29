@@ -127,7 +127,7 @@
           <b>NOTE</b>: Select movie picture from your device or take a movie
           picture.
         </p>
-        <ion-button (click)="takePicture()" color="tertiary"
+        <ion-button (click)="selectImage()" color="tertiary"
           >Select / Take Picture</ion-button
         >
       </ion-item>
@@ -138,6 +138,23 @@
           *ngIf="!selectedPhoto && modal.title === 'Edit Movie'"
         ></ion-spinner>
         <ion-img [src]="selectedPhoto"></ion-img>
+      </ion-item>
+    </ion-list>
+
+    <ion-list>
+      <ion-item *ngFor="let file of images; let i = index">
+        <ion-thumbnail slot="start">
+          <ion-img [src]="file.data"></ion-img>
+        </ion-thumbnail>
+        <ion-label class="ion-text-wrap">
+          {{ file.name }}
+        </ion-label>
+        <ion-button slot="end" fill="clear" (click)="startUpload(file)">
+          <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+        </ion-button>
+        <ion-button slot="end" fill="clear" (click)="deleteImage(file)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button>
       </ion-item>
     </ion-list>
 
@@ -153,5 +170,7 @@
         >Clear</ion-button
       >
     </div>
+
+    <ion-button color="danger" (click)="loadFiles()">LoadFile</ion-button>
   </form>
 </ion-content>

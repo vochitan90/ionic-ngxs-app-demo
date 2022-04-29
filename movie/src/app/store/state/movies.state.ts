@@ -81,10 +81,9 @@ export class MovieState {
     const newMovie = await this.moviesService.addMovie(payload).toPromise();
     newMovie.likes = 0;
     newMovie.comments = [];
-    debugger;
     const state = getState();
     patchState({
-      movies: [...state.movies, newMovie],
+      movies: [newMovie, ...state.movies],
     });
   }
 

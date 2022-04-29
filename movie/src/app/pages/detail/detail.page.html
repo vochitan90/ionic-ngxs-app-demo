@@ -8,7 +8,10 @@
 </ion-header>
 
 <!-- <ion-content class="outer-content" *ngIf="$movieDetail | async; let movie"> -->
-<ion-content class="outer-content" *ngIf="movieDetail$ | async as movie">
+<ion-content
+  class="outer-content ion-text-center"
+  *ngIf="movieDetail$ | async as movie"
+>
   <ion-grid fixed style="height: 50vh">
     <ion-row class="ion-align-items-center" style="height: 50vh">
       <ion-col size-lg="6" offset-lg="3" size-md="10" offset-md="1">
@@ -31,14 +34,13 @@
           </ion-item>
           <ion-item
             lines="none"
-            class="poster"
-            class="ion-no-padding"
+            class="poster ion-no-padding"
             style="padding-top: 10px"
           >
             <img
               *ngIf="movie?.poster"
               [src]="movie?.poster"
-              height="300px"
+              height="450px"
               alt="Movie Poster Detail Page"
               (error)="handleMissingImage($event)"
             />
