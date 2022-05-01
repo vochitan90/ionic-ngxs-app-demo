@@ -151,46 +151,6 @@ export class FileSytemUtil {
       });
   }
 
-  // async loadFile(fileName: string) {
-  //   const loading = await this.loadingController.create({
-  //     message: 'Loading data...',
-  //   });
-  //   await loading.present();
-
-  //   return Filesystem.readdir({
-  //     path: IMAGE_DIR,
-  //     directory: Directory.Data,
-  //   })
-  //     .then(
-  //       async (result) => {
-  //         debugger;
-  //         // return await this.loadFileData(
-  //         //   result.files.filter((f) => f === fileName)
-  //         // );
-
-  //         await result.files.filter((f) => f === fileName);
-
-  //         const filePath = `${IMAGE_DIR}/${fileName}`;
-
-  //         const readFile = await Filesystem.readFile({
-  //           path: filePath,
-  //           directory: Directory.Data,
-  //         });
-
-  //       },
-  //       async (err) => {
-  //         // Folder does not yet exists!
-  //         await Filesystem.mkdir({
-  //           path: IMAGE_DIR,
-  //           directory: Directory.Data,
-  //         });
-  //       }
-  //     )
-  //     .then((_) => {
-  //       loading.dismiss();
-  //     });
-  // }
-
   // Get the actual base64 data of an image
   // base on the name of the file
   async loadFileData(fileNames: string[]) {

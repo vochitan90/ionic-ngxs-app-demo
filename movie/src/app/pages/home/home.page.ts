@@ -99,6 +99,7 @@ export class HomePage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: component,
       componentProps: componentProps,
+      cssClass: 'update-movie-modal',
     });
     await modal.present();
 

@@ -99,17 +99,11 @@
 
       <!-- Sliding options. -->
       <ion-item-options side="end">
-        <ion-item-option
-          class="round-button"
-          color="primary"
-          (click)="editMovie(movie)"
-          ><ion-icon name="create"></ion-icon
+        <ion-item-option color="primary" (click)="editMovie(movie)"
+          ><ion-icon slot="icon-only" name="create"></ion-icon
         ></ion-item-option>
-        <ion-item-option
-          class="round-button"
-          color="danger"
-          (click)="deleteMovie(movie)"
-          ><ion-icon name="trash"></ion-icon
+        <ion-item-option color="danger" (click)="deleteMovie(movie)"
+          ><ion-icon slot="icon-only" name="trash"></ion-icon
         ></ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
