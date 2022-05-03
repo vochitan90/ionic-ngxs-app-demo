@@ -5,7 +5,7 @@
 - ionic serve 
 
 2. Back end:
-- Cd to json-server folder then run json-server --watch db.json
+- No need => i'm using mockio api
 
 FEATURES
 
@@ -18,6 +18,7 @@ FEATURES
   (* Note in the new/edit form we can select or take a picture) 
 
 2. Detail page:
-- Show detai movie 
+- Show detail movie 
 - Can like and comment
+- Can view list of comments
 
