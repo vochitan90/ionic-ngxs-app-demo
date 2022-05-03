@@ -14,6 +14,7 @@ import {
 import { Router } from '@angular/router';
 import { MovieModalComponent } from '../../components/movie-modal/movie-modal.component';
 import { ToastController } from '@ionic/angular';
+import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-home',
@@ -47,7 +48,22 @@ export class HomePage implements OnInit {
 
   ionViewWillEnter() {
     //this.fetchMovies(this.pagination);
+    Network.addListener('networkStatusChange', (status) => {
+      console.log('Network status changed', status);
+    });
+
+    this.logCurrentNetworkStatus();
   }
+
+  logCurrentNetworkStatus = async () => {
+    const status = await Network.getStatus();
+
+    if (!status.connected) {
+      this.presentToast('No internet connection!', 'danger');
+    }
+
+    console.log('Network status:', status);
+  };
 
   ngOnInit(): void {
     this.fetchMovies(this.pageNumber);
