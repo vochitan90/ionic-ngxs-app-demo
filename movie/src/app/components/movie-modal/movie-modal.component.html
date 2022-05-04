@@ -5,7 +5,7 @@
         <ion-icon name="close" color="light"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title> {{ modal.title }} </ion-title>
+    <ion-title> {{ modalProps.title }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -135,7 +135,7 @@
         <!-- Bubbles -->
         <ion-spinner
           name="bubbles"
-          *ngIf="!selectedPhoto && modal.title === 'Edit Movie'"
+          *ngIf="!selectedPhoto && modalProps.title === 'Edit Movie'"
         ></ion-spinner>
         <ion-img [src]="selectedPhoto"></ion-img>
       </ion-item>
@@ -160,7 +160,7 @@
 
     <div class="ion-float-right ion-padding">
       <ion-button type="submit" color="primary" [disabled]="!movieForm.valid">{{
-        modal.buttonText
+        modalProps.buttonText
       }}</ion-button>
       <ion-button
         color="danger"

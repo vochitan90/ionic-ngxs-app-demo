@@ -32,10 +32,9 @@ import { FileSytemUtil, LocalFile } from '@app/utils/file-system.util';
   styleUrls: ['./movie-modal.component.scss'],
 })
 export class MovieModalComponent implements OnInit {
-  modal: Modal = {
-    title: '',
-    buttonText: '',
-  };
+  modalProps: any;
+
+  option: string = '';
 
   movieForm: FormGroup;
 
@@ -77,6 +76,8 @@ export class MovieModalComponent implements OnInit {
     private plt: Platform
   ) {
     this.createForm();
+    this.modalProps = { ...this.navParams?.data?.modalProps };
+    this.option = this.navParams.get('option');
   }
 
   createForm() {
@@ -95,11 +96,11 @@ export class MovieModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.modal = { ...this.navParams.data.modalProps };
-    if (this.modal.title === 'Edit Movie') {
-      this.movieForm.patchValue(this.modal.movie);
+    //this.modal = { ...this.navParams?.data?.modalProps };
+    if (this.option === 'edit') {
+      this.movieForm.patchValue(this.modalProps.movie);
       // Set image for src
-      this.selectedPhoto = this.modal.movie?.poster;
+      this.selectedPhoto = this.modalProps.movie?.poster;
     }
   }
 
@@ -107,7 +108,7 @@ export class MovieModalComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  async updatePoster() {
+  async getImageFromFileSystem() {
     // way 1
     // if (this.selectedPhoto) {
     //   const { secure_url } =
@@ -139,21 +140,20 @@ export class MovieModalComponent implements OnInit {
   }
 
   async movieFormSubmit() {
-    await this.presentLoading();
-    await this.updatePoster();
-
-    if (this.navParams.data.option === 'add') {
+    this.presentLoading();
+    await this.getImageFromFileSystem(); // load image from file system and update poster url
+    if (this.option === 'add') {
       await this.store.dispatch(new AddMovie(this.movieForm.value));
       this.clearMovieForm();
       this.loadingController.dismiss();
-      await this.presentToast('Add successfully!');
-    } else if (this.navParams.data.option === 'edit') {
+      this.presentToast('Add successfully!');
+    } else {
       await this.store.dispatch(new EditMovie(this.movieForm.value));
       this.loadingController.dismiss();
-      await this.presentToast('Update successfully!');
+      this.presentToast('Update successfully!');
     }
 
-    this.dismiss();
+    this.modalCtrl.dismiss();
   }
 
   clearMovieForm() {
@@ -169,7 +169,7 @@ export class MovieModalComponent implements OnInit {
       color: 'success',
       cssClass: 'movie-modal',
     });
-    toast.present();
+    await toast.present();
   }
 
   async presentLoading() {

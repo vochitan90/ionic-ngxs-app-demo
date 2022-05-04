@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="1" failures="0" errors="0" time="3.224">
-  <testsuite name="MovieState" errors="0" failures="0" skipped="0" timestamp="2022-04-28T03:47:06" time="1.701" tests="1">
-    <testcase classname="MovieState should add movies successfully" name="MovieState should add movies successfully" time="0.024">
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="52.12">
+  <testsuite name="HomePage" errors="0" failures="0" skipped="0" timestamp="2022-05-04T10:15:46" time="49.56" tests="3">
+    <testcase classname="HomePage should create" name="HomePage should create" time="0.109">
+    </testcase>
+    <testcase classname="HomePage should show modal when click add" name="HomePage should show modal when click add" time="7.824">
+    </testcase>
+    <testcase classname="HomePage should show modal when click edit" name="HomePage should show modal when click edit" time="38.15">
     </testcase>
   </testsuite>
 </testsuites>

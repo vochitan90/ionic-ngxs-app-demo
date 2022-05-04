@@ -63,22 +63,6 @@ export class CommentModalComponent implements OnInit {
       comments = [...this.modal.comments];
     }
 
-    // if (typeof this.modal.movie.rate === 'undefined') {
-    //   movieToUpdate = {
-    //     ...movieToUpdate,
-    //     rate: this.commentForm.value.rating,
-    //     numVotes: 1,
-    //   };
-    // } else {
-    //   movieToUpdate = {
-    //     ...movieToUpdate,
-    //     numVotes: movieToUpdate.numVotes + 1,
-    //     rate:
-    //       (movieToUpdate.rate + this.commentForm.value.rating) /
-    //       movieToUpdate.numVotes,
-    //   };
-    // }
-
     comments.push(this.commentForm.value.comment);
     movieToUpdate.comments = comments;
     await this.store.dispatch(new CommentMovie(movieToUpdate)).toPromise();

@@ -63,11 +63,6 @@ export class DetailPage {
   }
 
   async presentModal(componentProps: any, component) {
-    console.log(
-      'DetailsPage::presentModal | method called -> movie',
-      this.movie
-    );
-    // const componentProps = { modalProps: { item: this.movie}};
     const modal = await this.modalCtrl.create({
       component: component,
       componentProps: componentProps,

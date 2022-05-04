@@ -73,36 +73,6 @@ export class FileSytemUtil {
 
   // https://ionicframework.com/docs/angular/your-first-app/saving-photos
   private async readAsBase64(photo: Photo) {
-    // if (this.plt.is('hybrid')) {
-    //   try {
-    //     const file = await Filesystem.readFile({
-    //       path: photo.path,
-    //     });
-
-    //     Filesystem.readFile({
-    //       path: photo.path,
-    //     }).then(
-    //       (file) => {
-    //         console.log('data:', file);
-    //         return file.data;
-    //       },
-    //       (error) => {
-    //         console.log(error);
-    //       }
-    //     );
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // } else {
-    //   // Fetch the photo, read as a blob, then convert to base64 format
-    //   const response = await fetch(photo.webPath);
-    //   const blob = await response.blob();
-
-    //   return await this.convertBlobToBase64(blob);
-    // }
-
-    // Fetch the photo, read as a blob, then convert to base64 format
-
     const response = await fetch(photo.webPath!);
     const blob = await response.blob();
 

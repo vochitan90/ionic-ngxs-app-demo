@@ -47,7 +47,6 @@ export class HomePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    //this.fetchMovies(this.pagination);
     Network.addListener('networkStatusChange', (status) => {
       console.log('Network status changed', status);
     });
@@ -62,7 +61,7 @@ export class HomePage implements OnInit {
       this.presentToast('No internet connection!', 'danger');
     }
 
-    console.log('Network status:', status);
+    //console.log('Network status:', status);
   };
 
   ngOnInit(): void {
@@ -81,7 +80,8 @@ export class HomePage implements OnInit {
 
   doInfinite(event) {
     setTimeout(() => {
-      event.target.complete();
+      event?.target?.complete();
+      //this.infiniteScroll?.complete();
       //this.showSkeleton = true;
       this.pageNumber = this.pageNumber + 1;
       this.showScrollTop = true;
@@ -100,14 +100,6 @@ export class HomePage implements OnInit {
   }
 
   viewMovieDetails(id: string) {
-    // this.store
-    //   .dispatch(new GetMovieDetail(movie.id))
-    //   .toPromise()
-    //   .then((res) => {
-
-    //   })
-    //   .catch((error) => {});
-
     this.router.navigate(['detail', id]);
   }
 
@@ -161,7 +153,7 @@ export class HomePage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           id: 'cancel-button',
-          handler: (blah) => {
+          handler: () => {
             console.log('Confirm Cancel: blah');
           },
         },
