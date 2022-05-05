@@ -74,11 +74,7 @@ export class MovieModalComponent implements OnInit {
     private uploadImageService: UploadImageService,
     private loadingController: LoadingController,
     private plt: Platform
-  ) {
-    this.createForm();
-    this.modalProps = { ...this.navParams?.data?.modalProps };
-    this.option = this.navParams.get('option');
-  }
+  ) {}
 
   createForm() {
     this.movieForm = this.formBuilder.group({
@@ -96,6 +92,10 @@ export class MovieModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.createForm();
+    this.modalProps = { ...this.navParams?.data?.modalProps };
+    this.option = this.navParams.get('option');
+
     //this.modal = { ...this.navParams?.data?.modalProps };
     if (this.option === 'edit') {
       this.movieForm.patchValue(this.modalProps.movie);

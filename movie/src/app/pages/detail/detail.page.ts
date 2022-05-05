@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -13,6 +13,7 @@ import { CommentModalComponent } from '../../components/comment-modal/comment-mo
   selector: 'app-detail',
   templateUrl: './detail.page.html',
   styleUrls: ['./detail.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailPage {
   @Select(MovieState.getMovieDetail)
@@ -30,9 +31,10 @@ export class DetailPage {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     await this.store.dispatch(new GetMovieDetail(id)).toPromise();
     this.movie = { ...this.store.selectSnapshot(MovieState.getMovieDetail) };
+    //this.movie = this.store.selectSnapshot(MovieState.getMovieDetail);
   }
 
-  public handleMissingImage(event: Event) {
+  public handleMissingImage(event: Event): void {
     (event.target as HTMLImageElement).src =
       'https://wwv.bbtor.net/img/default_thumbnail.svg';
   }
@@ -62,7 +64,7 @@ export class DetailPage {
     this.presentModal(componentProps, ShowCommentModalComponent);
   }
 
-  async presentModal(componentProps: any, component) {
+  async presentModal(componentProps: any, component): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: component,
       componentProps: componentProps,
@@ -75,7 +77,7 @@ export class DetailPage {
     }
   }
 
-  async presentToast(message: string) {
+  async presentToast(message: string): Promise<void> {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000,

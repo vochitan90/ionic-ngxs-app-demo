@@ -44,7 +44,7 @@ export class MovieState {
 
   @Action(GetMovieDetail)
   async getMovieDetail(
-    { getState, patchState }: StateContext<MoviesStateModel>,
+    { patchState }: StateContext<MoviesStateModel>,
     { id }
   ): Promise<void> {
     const movieDetail = await this.moviesService.getMovie(id).toPromise();
@@ -54,21 +54,22 @@ export class MovieState {
   }
 
   @Action(FetchMovies)
-  fetchMovies(
+  async fetchMovies(
     { getState, patchState }: StateContext<MoviesStateModel>,
     { pageNumber }
   ) {
-    return this.moviesService.getMovies(pageNumber).pipe(
-      tap(
-        (moviesRes) => {
+    await this.moviesService
+      .getMovies(pageNumber)
+      .pipe(
+        tap((moviesRes) => {
+          console.log(moviesRes);
           const state = getState();
           patchState({
             movies: [...state.movies, ...moviesRes],
           });
-        },
-        catchError((_) => of('Can not load movies'))
+        })
       )
-    );
+      .toPromise();
   }
 
   @Action(AddMovie)
@@ -155,6 +156,7 @@ export class MovieState {
     { payload }
   ): Promise<void> {
     //const likeMovie = await this.moviesService.editMovie(payload).toPromise();
+
     // setState(
     //   patch({
     //     movies: updateItem(
@@ -168,8 +170,9 @@ export class MovieState {
     //   })
     // );
 
-    const likeMovie = await this.moviesService.editMovie(payload).toPromise();
+    // Way 2
 
+    const likeMovie = await this.moviesService.editMovie(payload).toPromise();
     const updateLike = produce(getState(), (draft: MoviesStateModel) => {
       console.log(draft);
       const findIndex = draft.movies.findIndex(

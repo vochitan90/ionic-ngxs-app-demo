@@ -2,14 +2,14 @@ export interface Movie {
   id: string;
   title: string;
   year: number;
-  director?: string | null;
-  cast?: string | null;
-  genre?: string | null;
-  notes?: string | null;
-  poster?: string | null;
-  videoId?: string | null;
-  genreImage?: string | null;
-  likes?: number | 0;
-  rate?: number | 0;
+  director?: string;
+  cast?: string;
+  genre?: string;
+  notes?: string;
+  poster?: string;
+  videoId?: string;
+  genreImage?: string;
+  likes?: number;
+  rate?: number;
   comments?: string[];
 }

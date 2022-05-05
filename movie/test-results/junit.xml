@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="3" failures="0" errors="0" time="52.12">
-  <testsuite name="HomePage" errors="0" failures="0" skipped="0" timestamp="2022-05-04T10:15:46" time="49.56" tests="3">
-    <testcase classname="HomePage should create" name="HomePage should create" time="0.109">
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="28.116">
+  <testsuite name="HomePage" errors="0" failures="0" skipped="0" timestamp="2022-05-04T12:04:27" time="23.795" tests="3">
+    <testcase classname="HomePage should create" name="HomePage should create" time="0.137">
     </testcase>
-    <testcase classname="HomePage should show modal when click add" name="HomePage should show modal when click add" time="7.824">
+    <testcase classname="HomePage should show modal when click add" name="HomePage should show modal when click add" time="9.681">
     </testcase>
-    <testcase classname="HomePage should show modal when click edit" name="HomePage should show modal when click edit" time="38.15">
+    <testcase classname="HomePage should show modal when click edit" name="HomePage should show modal when click edit" time="8.996">
     </testcase>
   </testsuite>
 </testsuites>

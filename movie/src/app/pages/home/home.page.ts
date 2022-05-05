@@ -1,4 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { MovieState } from '../../store/state/movies.state';
 import { Observable } from 'rxjs';
@@ -15,11 +20,13 @@ import { Router } from '@angular/router';
 import { MovieModalComponent } from '../../components/movie-modal/movie-modal.component';
 import { ToastController } from '@ionic/angular';
 import { Network } from '@capacitor/network';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
@@ -61,7 +68,7 @@ export class HomePage implements OnInit {
       this.presentToast('No internet connection!', 'danger');
     }
 
-    //console.log('Network status:', status);
+    console.log('Network status:', status);
   };
 
   ngOnInit(): void {
@@ -71,17 +78,18 @@ export class HomePage implements OnInit {
   fetchMovies(pageNumber: number) {
     this.store
       .dispatch(new FetchMovies(pageNumber))
-      .toPromise()
-      .catch((error) => {
-        console.log(error);
-        this.presentToast('Can not load movies', 'danger');
-      });
+      .pipe(
+        catchError((error) => {
+          //console.log(error);
+          return this.presentToast('Can not load movies!', 'danger');
+        })
+      )
+      .subscribe();
   }
 
-  doInfinite(event) {
+  doInfinite(event): void {
     setTimeout(() => {
       event?.target?.complete();
-      //this.infiniteScroll?.complete();
       //this.showSkeleton = true;
       this.pageNumber = this.pageNumber + 1;
       this.showScrollTop = true;
@@ -89,21 +97,21 @@ export class HomePage implements OnInit {
     }, 500);
   }
 
-  scrollToTop() {
+  scrollToTop(): void {
     this.content.scrollToTop(2000); // animation
     this.showScrollTop = false;
   }
 
-  public handleMissingImage(event: Event) {
+  public handleMissingImage(event: Event): void {
     (event.target as HTMLImageElement).src =
       'https://wwv.bbtor.net/img/default_thumbnail.svg';
   }
 
-  viewMovieDetails(id: string) {
+  viewMovieDetails(id: string): void {
     this.router.navigate(['detail', id]);
   }
 
-  async presentModal(componentProps: any, component) {
+  async presentModal(componentProps: any, component): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: component,
       componentProps: componentProps,
@@ -117,7 +125,7 @@ export class HomePage implements OnInit {
     }
   }
 
-  addMovie() {
+  addMovie(): void {
     const componentProps = {
       modalProps: { title: 'Add Movie', buttonText: 'Add Movie' },
       option: 'add',
@@ -125,7 +133,7 @@ export class HomePage implements OnInit {
     this.presentModal(componentProps, MovieModalComponent);
   }
 
-  editMovie(movie: Movie) {
+  editMovie(movie: Movie): void {
     // map comments property
     const componentProps = {
       modalProps: {
@@ -138,11 +146,11 @@ export class HomePage implements OnInit {
     this.presentModal(componentProps, MovieModalComponent);
   }
 
-  deleteMovie(movie: Movie) {
+  deleteMovie(movie: Movie): void {
     this.presentAlertConfirm(movie, `Are you sure to delete ${movie.title}?`);
   }
 
-  async presentAlertConfirm(movie, message) {
+  async presentAlertConfirm(movie, message): Promise<void> {
     const alert = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
       header: 'Confirm!',
@@ -173,7 +181,7 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
-  async showLoading() {
+  async showLoading(): Promise<void> {
     const loading = await this.loadingController.create({
       spinner: null,
       message: 'Please wait...',
