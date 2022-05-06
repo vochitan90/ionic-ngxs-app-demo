@@ -40,7 +40,6 @@ export class DetailPage {
   }
 
   onClickLike() {
-    debugger;
     console.log('DetailsPage::onClickLike');
     if (typeof this.movie.likes === 'undefined') {
       this.movie.likes = 0;

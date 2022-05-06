@@ -79,7 +79,7 @@ export class MovieFormPage implements OnInit {
     public cdr: ChangeDetectorRef
   ) {}
 
-  createForm() {
+  createForm(): void {
     this.movieForm = this.formBuilder.group({
       id: '',
       title: new FormControl('Test', Validators.required),
@@ -174,7 +174,7 @@ export class MovieFormPage implements OnInit {
     this.movieForm.reset();
   }
 
-  async presentToast(message: string) {
+  async presentToast(message: string): Promise<void> {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000,
@@ -186,7 +186,7 @@ export class MovieFormPage implements OnInit {
     await toast.present();
   }
 
-  async presentLoading() {
+  async presentLoading(): Promise<void> {
     const loading = await this.loadingController.create({
       message: 'Processing data please wait ...',
       translucent: true,
@@ -196,12 +196,12 @@ export class MovieFormPage implements OnInit {
     await loading.present();
   }
 
-  async selectImage() {
+  async selectImage(): Promise<void> {
     this.selectedPhoto = await (await this.fileSytem.selectImage()).base64Data;
     this.cdr.markForCheck();
   }
 
-  async loadFiles() {
+  async loadFiles(): Promise<void> {
     await this.fileSytem.loadFiles();
     this.images = this.fileSytem.getImages;
     this.cdr.markForCheck();

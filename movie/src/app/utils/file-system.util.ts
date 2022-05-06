@@ -55,7 +55,6 @@ export class FileSytemUtil {
 
   // Create a new file from a capture image
   async saveImage(photo: Photo) {
-    debugger;
     const base64Data = await this.readAsBase64(photo);
 
     const formatFile = photo.format === 'jpeg' ? 'jpg' : photo.format;
@@ -144,7 +143,6 @@ export class FileSytemUtil {
   }
 
   async loadSingleFileByName(fileName: string) {
-    debugger;
     const filePath = `${IMAGE_DIR}/${fileName}`;
 
     const readFile = await Filesystem.readFile({

@@ -10,7 +10,6 @@ export class UploadImageService {
   constructor(private http: HttpClient, public cloudinary: Cloudinary) {}
 
   async uploadImageToCloudinary(title: string, image: string): Promise<any> {
-    debugger;
     let formData = new FormData();
     formData.append('file', image);
     formData.append('upload_preset', this.cloudinary.config().upload_preset);
