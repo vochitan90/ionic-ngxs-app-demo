@@ -17,6 +17,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/detail/detail.module').then((m) => m.DetailPageModule),
   },
+  {
+    path: 'movie-form',
+    loadChildren: () =>
+      import('./pages/movie-form/movie-form.module').then(
+        (m) => m.MovieFormPageModule
+      ),
+  },
 ];
 
 @NgModule({

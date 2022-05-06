@@ -55,9 +55,12 @@ export class FileSytemUtil {
 
   // Create a new file from a capture image
   async saveImage(photo: Photo) {
+    debugger;
     const base64Data = await this.readAsBase64(photo);
 
-    this.fileName = new Date().getTime() + '.jpeg';
+    const formatFile = photo.format === 'jpeg' ? 'jpg' : photo.format;
+
+    this.fileName = new Date().getTime() + '.' + formatFile;
     const savedFile = await Filesystem.writeFile({
       path: `${IMAGE_DIR}/${this.fileName}`,
       data: base64Data as string,
@@ -100,13 +103,13 @@ export class FileSytemUtil {
     });
     await loading.present();
 
-    Filesystem.readdir({
+    await Filesystem.readdir({
       path: IMAGE_DIR,
       directory: Directory.Data,
     })
       .then(
         async (result) => {
-          return await this.loadFileData(result.files);
+          await this.loadFileData(result.files);
         },
         async (err) => {
           // Folder does not yet exists!
@@ -135,14 +138,13 @@ export class FileSytemUtil {
       this.images.push({
         name: fileName,
         path: filePath,
-        data: `data:image/jpeg;base64,${readFile.data}`,
+        data: `data:image/jpg;base64,${readFile.data}`,
       });
     }
-
-    return this.images;
   }
 
   async loadSingleFileByName(fileName: string) {
+    debugger;
     const filePath = `${IMAGE_DIR}/${fileName}`;
 
     const readFile = await Filesystem.readFile({
@@ -150,6 +152,6 @@ export class FileSytemUtil {
       directory: Directory.Data,
     });
 
-    return `data:image/jpeg;base64,${readFile.data}`;
+    return `data:image/${fileName.split('.')[1]};base64,${readFile.data}`;
   }
 }

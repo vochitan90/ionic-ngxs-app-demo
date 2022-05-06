@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   OnInit,
   ViewChild,
@@ -15,12 +16,15 @@ import {
   IonInfiniteScroll,
   LoadingController,
   ModalController,
+  NavController,
 } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { MovieModalComponent } from '../../components/movie-modal/movie-modal.component';
 import { ToastController } from '@ionic/angular';
 import { Network } from '@capacitor/network';
 import { catchError } from 'rxjs/operators';
+import { IonItemSliding } from '@ionic/angular';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-home',
@@ -40,13 +44,17 @@ export class HomePage implements OnInit {
 
   showScrollTop = false;
 
+  IMAGE_DIR = 'stored-images';
+
   constructor(
     private store: Store,
     private router: Router,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private loadingController: LoadingController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private cdr: ChangeDetectorRef,
+    public navController: NavController
   ) {}
 
   changeView() {
@@ -57,8 +65,9 @@ export class HomePage implements OnInit {
     Network.addListener('networkStatusChange', (status) => {
       console.log('Network status changed', status);
     });
-
     this.logCurrentNetworkStatus();
+
+    //this.fetchMovies(this.pageNumber);
   }
 
   logCurrentNetworkStatus = async () => {
@@ -80,7 +89,6 @@ export class HomePage implements OnInit {
       .dispatch(new FetchMovies(pageNumber))
       .pipe(
         catchError((error) => {
-          //console.log(error);
           return this.presentToast('Can not load movies!', 'danger');
         })
       )
@@ -98,8 +106,11 @@ export class HomePage implements OnInit {
   }
 
   scrollToTop(): void {
-    this.content.scrollToTop(2000); // animation
-    this.showScrollTop = false;
+    setTimeout(() => {
+      this.content.scrollToTop(2000); // animation
+      this.showScrollTop = false;
+      //this.cdr.markForCheck();`
+    }, 0);
   }
 
   public handleMissingImage(event: Event): void {
@@ -126,31 +137,40 @@ export class HomePage implements OnInit {
   }
 
   addMovie(): void {
-    const componentProps = {
-      modalProps: { title: 'Add Movie', buttonText: 'Add Movie' },
-      option: 'add',
-    };
-    this.presentModal(componentProps, MovieModalComponent);
+    // const componentProps = {
+    //   modalProps: { title: 'Add Movie', buttonText: 'Add Movie' },
+    //   option: 'add',
+    // };ß
+    // this.presentModal(componentProps, MovieModalComponent);
+
+    this.navController.navigateForward(['/movie-form']);
   }
 
-  editMovie(movie: Movie): void {
+  editMovie(slidingItem: IonItemSliding, movie: Movie): void {
     // map comments property
-    const componentProps = {
-      modalProps: {
-        title: 'Edit Movie',
-        buttonText: 'Edit Movie',
-        movie: movie,
-      },
-      option: 'edit',
-    };
-    this.presentModal(componentProps, MovieModalComponent);
+    // const componentProps = {
+    //   modalProps: {
+    //     title: 'Edit Movie',
+    //     buttonText: 'Edit Movie',
+    //     movie: movie,
+    //   },
+    //   option: 'edit',
+    // };
+    // this.presentModal(componentProps, MovieModalComponent);
+
+    const navigationExtras = { state: { movie: movie } };
+
+    this.router.navigate(['/movie-form'], navigationExtras);
+    //this.navController.navigateForward(['/movie-form']);
+
+    slidingItem.close();
   }
 
   deleteMovie(movie: Movie): void {
     this.presentAlertConfirm(movie, `Are you sure to delete ${movie.title}?`);
   }
 
-  async presentAlertConfirm(movie, message): Promise<void> {
+  async presentAlertConfirm(movie: Movie, message: string): Promise<void> {
     const alert = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
       header: 'Confirm!',
@@ -170,7 +190,20 @@ export class HomePage implements OnInit {
           id: 'confirm-button',
           handler: async () => {
             this.showLoading();
+
+            // begin to delete image in file system
+
+            const fileName = movie.poster.substring(
+              movie.poster.lastIndexOf('/') + 1
+            );
+
             await this.store.dispatch(new DeleteMovie(movie)).toPromise();
+
+            await Filesystem.deleteFile({
+              directory: Directory.Data,
+              path: this.IMAGE_DIR + '/' + fileName,
+            });
+
             this.loadingController.dismiss();
             this.presentToast('Delete successfully!');
           },

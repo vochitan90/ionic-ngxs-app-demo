@@ -1,10 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UploadImageService } from '@app/services/upload-image.service';
+import { AddMovie, EditMovie } from '@app/store/action/movies.actions';
+import { FileSytemUtil, LocalFile } from '@app/utils/file-system.util';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 import {
   LoadingController,
   ModalController,
@@ -12,31 +22,22 @@ import {
   Platform,
   ToastController,
 } from '@ionic/angular';
-import { Store, Action } from '@ngxs/store';
-import { AddMovie, EditMovie } from '../../store/action/movies.actions';
-import { Modal } from '../../models/modal.interface';
-import {
-  Camera,
-  CameraResultType,
-  CameraSource,
-  Photo,
-} from '@capacitor/camera';
-import { UploadImageService } from '@app/services/upload-image.service';
-import { Filesystem, Directory } from '@capacitor/filesystem';
-
-import { FileSytemUtil, LocalFile } from '@app/utils/file-system.util';
+import { Store } from '@ngxs/store';
 
 @Component({
-  selector: 'app-movie-modal',
-  templateUrl: './movie-modal.component.html',
-  styleUrls: ['./movie-modal.component.scss'],
+  selector: 'app-movie-form',
+  templateUrl: './movie-form.page.html',
+  styleUrls: ['./movie-form.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MovieModalComponent implements OnInit {
+export class MovieFormPage implements OnInit {
+  isEditMode = false;
+
   modalProps: any;
 
-  option: string = '';
-
   movieForm: FormGroup;
+
+  option: string = '';
 
   selectedPhoto: string;
 
@@ -68,18 +69,20 @@ export class MovieModalComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController,
-    public navParams: NavParams,
     private store: Store,
     public toastController: ToastController,
     private uploadImageService: UploadImageService,
     private loadingController: LoadingController,
-    private plt: Platform
+    private plt: Platform,
+    public route: ActivatedRoute,
+    public router: Router,
+    public cdr: ChangeDetectorRef
   ) {}
 
   createForm() {
     this.movieForm = this.formBuilder.group({
       id: '',
-      title: new FormControl('', Validators.required),
+      title: new FormControl('Test', Validators.required),
       year: new FormControl(new Date().getFullYear(), Validators.required),
       director: new FormControl(''),
       cast: new FormControl(''),
@@ -88,27 +91,35 @@ export class MovieModalComponent implements OnInit {
       poster: new FormControl(''),
     });
 
-    this.fileSytem.loadFiles();
+    //this.fileSytem.loadFiles();
   }
 
   ngOnInit(): void {
     this.createForm();
-    this.modalProps = { ...this.navParams?.data?.modalProps };
-    this.option = this.navParams.get('option');
+    //this.modalProps = { ...this.navParams?.data?.modalProps };
+    //this.option = this.navParams.get('option');
+
+    this.route.queryParams.subscribe(() => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        const movie = this.router.getCurrentNavigation().extras.state.movie;
+        this.movieForm.patchValue(movie);
+        // Set image for src
+        this.selectedPhoto = movie?.poster;
+        this.isEditMode = true;
+      } else {
+        this.isEditMode = false;
+      }
+    });
 
     //this.modal = { ...this.navParams?.data?.modalProps };
-    if (this.option === 'edit') {
-      this.movieForm.patchValue(this.modalProps.movie);
-      // Set image for src
-      this.selectedPhoto = this.modalProps.movie?.poster;
-    }
+    // if (this.option === 'edit') {
+    //   this.movieForm.patchValue(this.modalProps.movie);
+    //   // Set image for src
+    //   this.selectedPhoto = this.modalProps.movie?.poster;
+    // }
   }
 
-  dismiss() {
-    this.modalCtrl.dismiss();
-  }
-
-  async getImageFromFileSystem() {
+  async getImageFromFileSystem(): Promise<void> {
     // way 1
     // if (this.selectedPhoto) {
     //   const { secure_url } =
@@ -124,36 +135,39 @@ export class MovieModalComponent implements OnInit {
 
     // way 2: read file from file system
 
-    const fileInfo = await this.fileSytem.loadSingleFileByName(
-      this.fileSytem.getFileName
-    );
-
-    const { secure_url } =
-      await this.uploadImageService.uploadImageToCloudinary(
-        this.fileSytem.getFileName,
-        fileInfo
+    if (this.fileSytem.getFileName) {
+      const fileInfo = await this.fileSytem.loadSingleFileByName(
+        this.fileSytem.getFileName
       );
 
-    this.movieForm.patchValue({
-      poster: secure_url,
-    });
+      const { secure_url } =
+        await this.uploadImageService.uploadImageToCloudinary(
+          this.fileSytem.getFileName,
+          fileInfo
+        );
+
+      this.movieForm.patchValue({
+        poster: secure_url,
+      });
+    }
   }
 
   async movieFormSubmit() {
-    this.presentLoading();
+    await this.presentLoading();
+
     await this.getImageFromFileSystem(); // load image from file system and update poster url
-    if (this.option === 'add') {
+    if (!this.isEditMode) {
       await this.store.dispatch(new AddMovie(this.movieForm.value));
       this.clearMovieForm();
-      this.loadingController.dismiss();
-      this.presentToast('Add successfully!');
+      await this.loadingController.dismiss();
+      await this.presentToast('Added successfully!');
     } else {
       await this.store.dispatch(new EditMovie(this.movieForm.value));
-      this.loadingController.dismiss();
-      this.presentToast('Update successfully!');
+      await this.loadingController.dismiss();
+      await this.presentToast('Updated successfully!');
     }
 
-    this.modalCtrl.dismiss();
+    //this.modalCtrl.dismiss();
   }
 
   clearMovieForm() {
@@ -184,11 +198,13 @@ export class MovieModalComponent implements OnInit {
 
   async selectImage() {
     this.selectedPhoto = await (await this.fileSytem.selectImage()).base64Data;
+    this.cdr.markForCheck();
   }
 
   async loadFiles() {
     await this.fileSytem.loadFiles();
     this.images = this.fileSytem.getImages;
+    this.cdr.markForCheck();
   }
 
   async startUpload(file: LocalFile) {
@@ -230,5 +246,9 @@ export class MovieModalComponent implements OnInit {
     });
     this.loadFiles();
     this.presentToast('File removed.');
+  }
+
+  dismiss() {
+    this.modalCtrl.dismiss();
   }
 }

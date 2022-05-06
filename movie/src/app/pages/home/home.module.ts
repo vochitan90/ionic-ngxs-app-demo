@@ -15,10 +15,12 @@ import { Cloudinary } from 'cloudinary-core';
 import { UploadImageService } from '@services/upload-image.service';
 // import { FilterPipe } from '@pipes/filter.pipe';
 import { FilterPipe } from '../../pipes/filter.pipe';
+import { NgLetModule } from 'ng-let';
 
 @NgModule({
   imports: [
     CommonModule,
+    NgLetModule,
     FormsModule,
     IonicModule,
     HomePageRoutingModule,

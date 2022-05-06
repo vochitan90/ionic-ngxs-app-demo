@@ -1,160 +1,167 @@
-<!-- <ng-container *ngLet="movies$ | async as movies"> -->
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title> Movies List </ion-title>
-    <ion-buttons slot="end">
-      <!-- <ion-button (click)="showFavoritesMovies()">
+<ng-container *ngLet="movies$ | async as movies">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title> Movies List </ion-title>
+      <ion-buttons slot="end">
+        <!-- <ion-button (click)="showFavoritesMovies()">
         <ion-icon slot="icon-only" name="heart"></ion-icon>
       </ion-button> -->
-      <ion-button (click)="changeView()">
-        <ion-icon slot="icon-only" [name]="iconView"></ion-icon>
-      </ion-button>
-      <!-- <ion-button (click)="presentPopover($event)">
+        <ion-button (click)="changeView()">
+          <ion-icon slot="icon-only" [name]="iconView"></ion-icon>
+        </ion-button>
+        <!-- <ion-button (click)="presentPopover($event)">
         <ion-icon slot="icon-only" name="options"></ion-icon>
       </ion-button> -->
-    </ion-buttons>
-  </ion-toolbar>
-  <ion-toolbar color="primary">
-    <ion-searchbar
-      #search
-      animated="true"
-      show-cancel-button="focus"
-      placeholder="Search"
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar color="primary">
+      <ion-searchbar
+        #search
+        animated="true"
+        show-cancel-button="focus"
+        placeholder="Search"
+      >
+      </ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true" *ngIf="movies">
+    <!-- Add movie fab button. -->
+    <ion-fab vertical="top" horizontal="end" edge slot="fixed">
+      <ion-fab-button size="small" color="secondary" (click)="addMovie()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <ion-fab
+      [hidden]="!showScrollTop"
+      vertical="bottom"
+      horizontal="end"
+      slot="fixed"
     >
-    </ion-searchbar>
-  </ion-toolbar>
-</ion-header>
+      <ion-fab-button size="small" color="secondary" (click)="scrollToTop()">
+        <ion-icon name="arrow-up"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
 
-<ion-content [fullscreen]="true" *ngIf="movies$ | async">
-  <!-- Add movie fab button. -->
-  <ion-fab vertical="top" horizontal="end" edge slot="fixed">
-    <ion-fab-button size="small" color="secondary" (click)="addMovie()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+    <ion-item *ngIf="movies">
+      <ion-badge item-end slot="start">Results {{ movies.length }}</ion-badge>
+    </ion-item>
 
-  <ion-fab
-    [hidden]="!showScrollTop"
-    vertical="bottom"
-    horizontal="end"
-    slot="fixed"
-  >
-    <ion-fab-button size="small" color="secondary" (click)="scrollToTop()">
-      <ion-icon name="arrow-up"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-  <ion-item *ngIf="movies$ | async; let movies">
-    <ion-badge item-end slot="start">Results {{ movies.length }}</ion-badge>
-  </ion-item>
-
-  <!-- Movies List View. -->
-  <ion-list *ngIf="iconView === 'apps'">
-    <ion-item-sliding
-      *ngFor="let movie of movies$ | async | filter:search.value; let i = index"
-    >
-      <ion-item tappable (click)="viewMovieDetails(movie.id)">
-        <ion-thumbnail slot="start">
-          <img
-            [src]="movie.poster"
-            alt="Movie Poster"
-            (error)="handleMissingImage($event)"
-          />
-        </ion-thumbnail>
-        <ion-label>
-          <h2>{{ movie.title }}</h2>
-          <ion-text color="medium">
-            <h3>
-              <ion-icon name="calendar" color="primary" slot="start"></ion-icon>
-              {{ movie.year }}
-            </h3>
-          </ion-text>
-          <ion-text color="medium">
-            <h5>
-              <span *ngIf="movie.likes"
-                ><ion-icon
-                  name="thumbs-up"
+    <!-- Movies List View. -->
+    <ion-list *ngIf="iconView === 'apps'">
+      <ion-item-sliding
+        #slidingItem
+        *ngFor="let movie of movies | filter:search.value; let i = index"
+      >
+        <ion-item tappable (click)="viewMovieDetails(movie.id)">
+          <ion-thumbnail slot="start">
+            <img
+              [src]="movie.poster"
+              alt="Movie Poster"
+              (error)="handleMissingImage($event)"
+            />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ movie.title }}</h2>
+            <ion-text color="medium">
+              <h3>
+                <ion-icon
+                  name="calendar"
                   color="primary"
                   slot="start"
                 ></ion-icon>
-                {{ movie.likes }} |
-              </span>
-              <span *ngIf="movie.comments"
-                ><ion-icon
-                  name="chatbubble-ellipses"
-                  color="tertiary"
-                  slot="start"
-                ></ion-icon>
-                {{ movie.comments.length }}</span
-              >
-            </h5>
-          </ion-text>
-          <ion-text color="medium">
-            <h4>{{ movie.notes }}</h4>
-          </ion-text>
-        </ion-label>
-        <ion-note slot="end">
-          <ion-icon name="swap-horizontal"></ion-icon>
-        </ion-note>
-      </ion-item>
+                {{ movie.year }}
+              </h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h5>
+                <span *ngIf="movie.likes"
+                  ><ion-icon
+                    name="thumbs-up"
+                    color="primary"
+                    slot="start"
+                  ></ion-icon>
+                  {{ movie.likes }} |
+                </span>
+                <span *ngIf="movie.comments"
+                  ><ion-icon
+                    name="chatbubble-ellipses"
+                    color="tertiary"
+                    slot="start"
+                  ></ion-icon>
+                  {{ movie.comments.length }}</span
+                >
+              </h5>
+            </ion-text>
+            <ion-text color="medium">
+              <h4>{{ movie.notes }}</h4>
+            </ion-text>
+          </ion-label>
+          <ion-note slot="end">
+            <ion-icon name="swap-horizontal"></ion-icon>
+          </ion-note>
+        </ion-item>
 
-      <!-- Sliding options. -->
-      <ion-item-options side="end">
-        <ion-item-option color="primary" (click)="editMovie(movie)"
-          ><ion-icon slot="icon-only" name="create"></ion-icon
-        ></ion-item-option>
-        <ion-item-option color="danger" (click)="deleteMovie(movie)"
-          ><ion-icon slot="icon-only" name="trash"></ion-icon
-        ></ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+        <!-- Sliding options. -->
+        <ion-item-options side="end">
+          <ion-item-option
+            color="primary"
+            (click)="editMovie(slidingItem, movie)"
+            ><ion-icon slot="icon-only" name="create"></ion-icon
+          ></ion-item-option>
+          <ion-item-option color="danger" (click)="deleteMovie(movie)"
+            ><ion-icon slot="icon-only" name="trash"></ion-icon
+          ></ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
 
-  <!-- Movies Grid view. -->
-  <ion-grid *ngIf="iconView === 'list'">
-    <ion-row>
-      <ion-col
-        class="ion-align-self-center"
-        size-lg="3"
-        size-md="4"
-        size-sm="6"
-        size-xs="12"
-        *ngFor="let movie of movies$ | async; let i = index"
-      >
-        <ion-card (click)="viewMovieDetails(movie.id)">
-          <ion-item lines="none">
-            <h2><strong>{{ movie?.title }}</strong></h2>
-          </ion-item>
-          <ion-item lines="none" class="poster">
-            <ion-img
-              style="width: 100%"
-              [src]="movie.poster"
-              (ionError)="handleMissingImage($event)"
-            ></ion-img>
-          </ion-item>
-          <ion-card-content>
+    <!-- Movies Grid view. -->
+    <ion-grid *ngIf="iconView === 'list'">
+      <ion-row>
+        <ion-col
+          class="ion-align-self-center"
+          size-lg="3"
+          size-md="4"
+          size-sm="6"
+          size-xs="12"
+          *ngFor="let movie of movies; let i = index"
+        >
+          <ion-card (click)="viewMovieDetails(movie.id)">
             <ion-item lines="none">
-              <p>{{ movie?.notes }}</p>
+              <h2><strong>{{ movie?.title }}</strong></h2>
             </ion-item>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+            <ion-item lines="none" class="poster">
+              <ion-img
+                style="width: 100%"
+                [src]="movie.poster"
+                (ionError)="handleMissingImage($event)"
+              ></ion-img>
+            </ion-item>
+            <ion-card-content>
+              <ion-item lines="none">
+                <p>{{ movie?.notes }}</p>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-  <!-- Infinite Scroll. -->
-  <ion-infinite-scroll
-    *ngIf="!search.value"
-    #infiniteScroll
-    id="infinite-scroll"
-    threshold="100px"
-    (ionInfinite)="doInfinite($event)"
-  >
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      loadingText="Loading more movies..."
+    <!-- Infinite Scroll. -->
+    <ion-infinite-scroll
+      *ngIf="!search.value"
+      #infiniteScroll
+      id="infinite-scroll"
+      threshold="100px"
+      (ionInfinite)="doInfinite($event)"
     >
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-</ion-content>
-<!-- </ng-container> -->
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more movies..."
+      >
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-content>
+</ng-container>

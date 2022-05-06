@@ -30,8 +30,8 @@ export class DetailPage {
   async ionViewWillEnter() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     await this.store.dispatch(new GetMovieDetail(id)).toPromise();
-    this.movie = { ...this.store.selectSnapshot(MovieState.getMovieDetail) };
-    //this.movie = this.store.selectSnapshot(MovieState.getMovieDetail);
+    //this.movie = { ...this.store.selectSnapshot(MovieState.getMovieDetail) };
+    this.movie = this.store.selectSnapshot(MovieState.getMovieDetail);
   }
 
   public handleMissingImage(event: Event): void {
@@ -40,6 +40,7 @@ export class DetailPage {
   }
 
   onClickLike() {
+    debugger;
     console.log('DetailsPage::onClickLike');
     if (typeof this.movie.likes === 'undefined') {
       this.movie.likes = 0;

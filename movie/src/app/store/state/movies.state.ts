@@ -15,6 +15,7 @@ import {
 } from '../action/movies.actions';
 import { produce } from 'immer';
 import { of } from 'rxjs';
+import { ImmutableSelector, ImmutableContext } from '@ngxs-labs/immer-adapter';
 
 export interface MoviesStateModel {
   movies: Movie[];
@@ -33,16 +34,19 @@ export class MovieState {
   constructor(private moviesService: MoviesService) {}
 
   @Selector()
+  //@ImmutableSelector()
   static getMovies(state: MoviesStateModel) {
     return state.movies;
   }
 
   @Selector()
+  //@ImmutableSelector()
   static getMovieDetail(state: MoviesStateModel) {
     return state.movieDetail;
   }
 
   @Action(GetMovieDetail)
+  //@ImmutableContext()
   async getMovieDetail(
     { patchState }: StateContext<MoviesStateModel>,
     { id }
@@ -54,6 +58,7 @@ export class MovieState {
   }
 
   @Action(FetchMovies)
+  //@ImmutableContext()
   async fetchMovies(
     { getState, patchState }: StateContext<MoviesStateModel>,
     { pageNumber }
@@ -73,6 +78,7 @@ export class MovieState {
   }
 
   @Action(AddMovie)
+  //@ImmutableContext()
   async addMovie(
     { getState, patchState }: StateContext<MoviesStateModel>,
     { payload }
@@ -89,6 +95,7 @@ export class MovieState {
   }
 
   @Action(EditMovie)
+  //@ImmutableContext()
   async EditMovie(
     { setState, patchState, getState }: StateContext<MoviesStateModel>,
     { payload }
@@ -151,6 +158,7 @@ export class MovieState {
   // }
 
   @Action(LikeMovie)
+  //@ImmutableContext()
   async LikeMovie(
     { getState, setState, patchState }: StateContext<MoviesStateModel>,
     { payload }
@@ -199,6 +207,7 @@ export class MovieState {
   }
 
   @Action(CommentMovie)
+  //@ImmutableContext()
   async CommentMovie(
     { getState, patchState }: StateContext<MoviesStateModel>,
     { payload }
@@ -233,6 +242,7 @@ export class MovieState {
   }
 
   @Action(DeleteMovie)
+  //@ImmutableContext()
   async DeleteMovie(
     { setState }: StateContext<MoviesStateModel>,
     { payload }
