@@ -163,6 +163,7 @@ export class MovieFormPage implements OnInit {
       await this.presentToast('Added successfully!');
     } else {
       await this.store.dispatch(new EditMovie(this.movieForm.value));
+
       await this.loadingController.dismiss();
       await this.presentToast('Updated successfully!');
     }
@@ -197,7 +198,28 @@ export class MovieFormPage implements OnInit {
   }
 
   async selectImage(): Promise<void> {
+    debugger;
     this.selectedPhoto = await (await this.fileSytem.selectImage()).base64Data;
+
+    if (this.isEditMode && this.selectedPhoto) {
+      // delete the old one
+      const posterValue = this.movieForm.get('poster').value;
+      const getFileName = posterValue.substring(
+        posterValue.lastIndexOf('/') + 1
+      );
+
+      // check if the file exist in file system or not
+
+      const fileInfo = await this.fileSytem.loadSingleFileByName(getFileName);
+      if (fileInfo) {
+        await Filesystem.deleteFile({
+          directory: Directory.Data,
+          path: this.IMAGE_DIR + '/' + getFileName,
+        });
+      }
+    }
+
+    debugger;
     this.cdr.markForCheck();
   }
 

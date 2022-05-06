@@ -145,11 +145,14 @@ export class FileSytemUtil {
   async loadSingleFileByName(fileName: string) {
     const filePath = `${IMAGE_DIR}/${fileName}`;
 
-    const readFile = await Filesystem.readFile({
-      path: filePath,
-      directory: Directory.Data,
-    });
-
-    return `data:image/${fileName.split('.')[1]};base64,${readFile.data}`;
+    try {
+      const readFile = await Filesystem.readFile({
+        path: filePath,
+        directory: Directory.Data,
+      });
+      return `data:image/${fileName.split('.')[1]};base64,${readFile.data}`;
+    } catch (error) {
+      return null;
+    }
   }
 }
